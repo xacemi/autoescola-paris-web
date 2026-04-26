@@ -2,8 +2,9 @@
   "name": "Autoescola Paris",
   "short_name": "A. Paris",
   "description": "Autoescola Paris - Tot el que necessites per treure el carnet de conduir",
-  "start_url": "/",
+  "start_url": "https://app.autoescolaparis.com/",
   "display": "standalone",
+  "scope": "https://app.autoescolaparis.com/",
   "background_color": "#ffffff",
   "theme_color": "#1d4ed8",
   "orientation": "portrait",
@@ -21,6 +22,9 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "utilities"],
+  "categories": [
+    "education",
+    "utilities"
+  ],
   "lang": "ca"
 }
