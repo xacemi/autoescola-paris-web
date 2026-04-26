@@ -29,6 +29,12 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+
+    // Ignorar chrome-extension i altres esquemes no http/https
+    if (!url.protocol.startsWith('http')) return;
+
+    // Ignorar peticions POST, PUT, etc.
     if (event.request.method !== 'GET') return;
 
     event.respondWith(
@@ -45,6 +51,8 @@ self.addEventListener('fetch', (event) => {
                     cache.put(event.request, responseToCache);
                 });
                 return response;
+            }).catch(() => {
+                return cachedResponse;
             });
         })
     );
