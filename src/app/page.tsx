@@ -266,7 +266,7 @@ export default async function Home({
               <div className="flex flex-col gap-2 px-4 pb-4">
                 {[
                   { label: "Zona Examen Teórico. Oficina de Tráfico", addr: "Lleida", lat: 41.6209429, lng: 0.6121967 },
-                  { label: "Zona Examen 1", addr: "Passeig de l'Onze de Setembre, 67", lat: 41.6215337999, lng: 0.6103081 },
+                  { label: "Zona Examen 1", addr: "Passeig de l'Onze de Setembre, 67", lat: 41.6214687, lng: 0.6096928 },
                   { label: 'Zona Examen 2. Bombers. Vehículos Pesados y Motos', addr: 'Partida Vallcalent, Lleida', lat: 41.6224336, lng: 0.6056248 },
                   { label: 'Zona Examen 4', addr: 'C. Alcarras, 13-3, Lérida', lat: 41.6139831, lng: 0.6580825 },
                   { label: 'Zona Examen 5. Carrer Til·lers - Coches', addr: 'Lleida', lat: 41.6217063, lng: 0.6079476 },
