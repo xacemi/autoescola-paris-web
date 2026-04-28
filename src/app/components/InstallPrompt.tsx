@@ -13,21 +13,16 @@ export default function InstallPrompt() {
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    // No mostrar si ja està instal·lada com a PWA
     if (window.matchMedia('(display-mode: standalone)').matches) return;
 
-    // No mostrar si l'usuari ja ho ha vist
     const dismissed = localStorage.getItem('pwa-install-dismissed');
     if (dismissed) return;
 
-    // Detectar iOS
     const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
     setIsIOS(ios);
 
-    // Mostrar banner sempre (per iOS i per Android sense event)
     setShowBanner(true);
 
-    // Capturar event de Chrome Android si disponible
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -39,7 +34,6 @@ export default function InstallPrompt() {
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      // Chrome Android: instal·lació directa
       await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
@@ -70,24 +64,21 @@ export default function InstallPrompt() {
       padding: '16px',
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        {/* Logo */}
         <img
           src="/icons/icon-192x192.png"
           alt="Autoescola Paris"
           style={{ width: 52, height: 52, borderRadius: 12, flexShrink: 0 }}
         />
 
-        {/* Text */}
         <div style={{ flex: 1, color: 'white' }}>
           <p style={{ margin: 0, fontWeight: 700, fontSize: 15 }}>
-            Instal·la l&apos;app gratuïtament
+            Instala la app gratuitamente
           </p>
           <p style={{ margin: 0, fontSize: 12, opacity: 0.85 }}>
-            Accés ràpid des de la pantalla d&apos;inici
+            Acceso rápido desde la pantalla de inicio
           </p>
         </div>
 
-        {/* Botons */}
         <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
           <button
             onClick={handleDismiss}
@@ -101,7 +92,7 @@ export default function InstallPrompt() {
               cursor: 'pointer',
             }}
           >
-            Ara no
+            Ahora no
           </button>
           {deferredPrompt && (
             <button
@@ -117,13 +108,12 @@ export default function InstallPrompt() {
                 cursor: 'pointer',
               }}
             >
-              Instal·lar
+              Instalar
             </button>
           )}
         </div>
       </div>
 
-      {/* Instruccions manuals si no hi ha event (iOS o Chrome sense event) */}
       {!deferredPrompt && (
         <div style={{
           marginTop: 12,
@@ -135,11 +125,11 @@ export default function InstallPrompt() {
         }}>
           {isIOS ? (
             <p style={{ margin: 0 }}>
-              Toca <strong>Compartir</strong> (⬆️) i després <strong>&quot;Afegir a la pantalla d&apos;inici&quot;</strong>
+              Toca <strong>Compartir</strong> (⬆️) y después <strong>&quot;Añadir a la pantalla de inicio&quot;</strong>
             </p>
           ) : (
             <p style={{ margin: 0 }}>
-              Toca els <strong>tres puntets</strong> (⋮) i després <strong>&quot;Afegir a la pantalla d&apos;inici&quot;</strong>
+              Toca los <strong>tres puntos</strong> (⋮) y después <strong>&quot;Añadir a la pantalla de inicio&quot;</strong>
             </p>
           )}
         </div>
