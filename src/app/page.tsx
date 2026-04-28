@@ -224,7 +224,7 @@ export default async function Home({
               { label: 'Tus pagos y control. Necesitas un código', href: 'https://paris.winautogestvf.com/', emoji: '💳' },
               { label: 'Si no tienes código, clic aquí.', href: 'https://autoescolaparis.com/arxius/obtener_codigo.html', emoji: '🔑' },
               { label: 'Facilauto (WEB)', href: 'https://alumno.examentrafico.com/', emoji: '📚' },
-              { label: 'Pons Go', href: 'https://ponsgo.com/', emoji: '🎯' },
+              { label: 'Pons Go', href: 'https://ponsdigital.es/', emoji: '🎯' },
               { label: 'Resultado del Examen Oficial', href: 'https://sedeclave.dgt.gob.es/WEB_NOTP_CONSULTA/consultaNota.faces', emoji: '📋' },
             ].map((item) => (
               <a
@@ -265,10 +265,11 @@ export default async function Home({
               </summary>
               <div className="flex flex-col gap-2 px-4 pb-4">
                 {[
-                  { label: 'Zona Examen 1', addr: 'Passeig de l\'Onze de Setembre, 67', lat: 41.6215337999, lng: 0.6103081 },
-                  { label: 'Zona Bombers. Vehículos Pesados', addr: 'Partida Vallcalent, Lleida', lat: 41.6224336, lng: 0.6056248 },
+                  { label: "Zona Examen Teórico. Oficina de Tráfico", addr: "Lleida", lat: 41.6209429, lng: 0.6121967 },
+                  { label: "Zona Examen 1", addr: "Passeig de l'Onze de Setembre, 67", lat: 41.6215337999, lng: 0.6103081 },
+                  { label: 'Zona Examen 2. Bombers. Vehículos Pesados y Motos', addr: 'Partida Vallcalent, Lleida', lat: 41.6224336, lng: 0.6056248 },
                   { label: 'Zona Examen 4', addr: 'C. Alcarras, 13-3, Lérida', lat: 41.6139831, lng: 0.6580825 },
-                  { label: 'Carrer Til·lers', addr: 'Lleida', lat: 41.6217063, lng: 0.6079476 },
+                  { label: 'Zona Examen 5. Carrer Til·lers - Coches', addr: 'Lleida', lat: 41.6217063, lng: 0.6079476 },
                   { label: 'Pista examens trànsit', addr: 'Lleida', lat: 41.6252336, lng: 0.6646622 },
                 ].map((loc) => (
                   <a
@@ -336,7 +337,7 @@ export default async function Home({
               </summary>
               <div className="flex flex-col gap-2 px-4 pb-4">
                 {[
-                  { label: 'Autoescola Paris Lleida', addr: 'Rambla d\'Aragó, 35, 1er · 25003 Lleida', lat: 41.6140383, lng: 0.6198683 },
+                  { label: 'Autoescola Paris Lleida', addr: "Rambla d'Aragó, 35, 1er · 25003 Lleida", lat: 41.6140383, lng: 0.6198683 },
                   { label: 'Autoescola Paris Mollerussa', addr: 'Domènec Cardenal, 1 · 25230 Mollerussa', lat: 41.6297020, lng: 0.8920516 },
                 ].map((loc) => (
                   <a
