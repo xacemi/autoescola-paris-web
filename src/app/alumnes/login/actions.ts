@@ -1,14 +1,13 @@
 'use server'
-
 import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'  // ← AFEGIT
 
 export async function registreAlumne(_: unknown, formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const dni = (formData.get('dni') as string)?.toUpperCase().trim()
   const seu = formData.get('seu') as string
-
   const supabase = await createSupabaseServerClient()
 
   // Verificar que l'alumne està autoritzat i no s'ha registrat
@@ -39,16 +38,18 @@ export async function registreAlumne(_: unknown, formData: FormData) {
     .update({ registrat: true, data_registre: new Date().toISOString(), seu })
     .eq('id', alumne.id)
 
+  // ← AFEGIT: Enviar email de benvinguda amb links de Telegram
+  await sendTelegramWelcomeEmail(email, alumne.nom)
+
   redirect('/alumnes')
 }
 
 export async function loginAlumne(_: unknown, formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
-
   const supabase = await createSupabaseServerClient()
-  const { error } = await supabase.auth.signInWithPassword({ email, password })
 
+  const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) {
     return { error: 'Credencials incorrectes' }
   }
