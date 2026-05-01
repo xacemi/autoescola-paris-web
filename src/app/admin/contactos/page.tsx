@@ -74,7 +74,7 @@ export default async function ContactosPage() {
                 <form action={eliminarContacte.bind(null, c.id)} className="ml-auto">
                   <button
                     type="submit"
-                    onclick="return confirm('Segur que vols eliminar aquest contacte?')"
+                    onClick={() => confirm('Segur que vols eliminar aquest contacte?')}
                     className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-red-200"
                   >
                     <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
