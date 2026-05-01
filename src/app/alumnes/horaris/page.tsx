@@ -1,11 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import { useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+import { useState, useEffect } from 'react'
+import { createBrowserClient } from '@supabase/ssr'
 
 type Horari = {
   id: string
@@ -24,7 +20,10 @@ export default function AlumnesHorarisPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const supabase = createClient(supabaseUrl, supabaseKey)
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
 
     async function load() {
       const { data: { user } } = await supabase.auth.getUser()
@@ -46,7 +45,10 @@ export default function AlumnesHorarisPage() {
   }, [])
 
   async function toggleAssistencia(horariId: string) {
-    const supabase = createClient(supabaseUrl, supabaseKey)
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
     setPending(horariId)
     const assisteix = assistencies.has(horariId)
 
