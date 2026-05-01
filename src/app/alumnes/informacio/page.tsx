@@ -43,7 +43,7 @@ export default function AlumnesInformacioPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-xl font-bold text-zinc-800">📋 Informació important</h1>
+        <h1 className="text-xl font-bold text-zinc-800">📋 Informació important.</h1>
         <p className="text-sm text-zinc-500 mt-1">Toca cada apartat per llegir la informació</p>
       </div>
 
