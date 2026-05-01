@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { logoutAlumne } from './login/actions'
 import Link from 'next/link'
@@ -8,8 +7,9 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
   const supabase = await createSupabaseServerClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Si no hi ha usuari, mostrem el contingut sense header (serà el login)
   if (!user) {
-    redirect('/alumnes/login')
+    return <>{children}</>
   }
 
   // Verificar que és alumne
@@ -19,8 +19,9 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
     .eq('email', user.email!)
     .single()
 
+  // Si no és alumne, mostrem el contingut sense header (serà el login)
   if (!alumne) {
-    redirect('/alumnes/login')
+    return <>{children}</>
   }
 
   return (
