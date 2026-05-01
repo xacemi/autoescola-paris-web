@@ -126,7 +126,7 @@ export default async function Home({
       </section>
 
       {/* ── HORARIOS ── */}
-      <section id="horarios" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/ConsultaTeorico.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <section id="horarios" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/ClaseOnLine.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-[#0110D6]/60" />
         <div className="relative z-10 max-w-3xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 text-center">
@@ -186,7 +186,7 @@ export default async function Home({
       </section>
 
       {/* ── PERMISOS ── */}
-      <section id="permisos" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/Alumnos.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <section id="permisos" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/Matricula%20On%20line.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-white/60" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1F2937] mb-2 text-center">Permisos de conducción</h2>
@@ -355,7 +355,7 @@ export default async function Home({
       </section>
 
       {/* ── VÍDEOS ── */}
-      <section id="videos" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/Matricula%20On%20line.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <section id="videos" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/Videos.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-[#0110D6]/60" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 text-center">Vídeos</h2>
