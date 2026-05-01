@@ -37,7 +37,10 @@ export default async function InformacioAdminPage() {
                 </div>
                 <p className="text-xs text-zinc-500 line-clamp-2">{item.contingut}</p>
               </div>
-              <div className="flex gap-3 flex-shrink-0">
+              <div className="flex gap-3 flex-shrink-0items-center">
+                <Link href={`/admin/informacio/${item.id}`} className="text-sm text-blue-700 hover:underline">
+                  Editar
+                </Link>
                 <DeleteInformacioButton action={eliminarInformacio.bind(null, item.id)} />
               </div>
             </div>
