@@ -9,7 +9,7 @@ export default async function HorariosPage() {
 
   const [{ data: horaris }, { data: assistencies }] = await Promise.all([
     supabase.from('horaris').select('*').order('dia_setmana'),
-    supabase.from('alumnes_assistencies').select('horari_id, alumne_email'),
+    supabase.from('alumnes_assistencies').select('horari_id, alumne_email, alumnes_autoritzats(nom)'),
   ])
 
   // Agrupar assistències per horari
@@ -76,7 +76,8 @@ export default async function HorariosPage() {
                     <div className="flex flex-wrap gap-2">
                       {llista.map((a) => (
                         <span key={a.alumne_email} className="text-xs bg-white border border-green-200 text-green-700 px-2.5 py-1 rounded-full">
-                          {a.alumne_email}
+                          {(a.alumnes_autoritzats as any)?.nom ?? a.alumne_email} · {a.alumne_email}
+
                         </span>
                       ))}
                     </div>
