@@ -9,6 +9,7 @@ const navItems = [
   { href: '/admin/precios', label: 'Precios' },
   { href: '/admin/alumnos', label: 'Alumnos' },
   { href: '/admin/videos', label: 'Vídeos' },
+  { href: '/admin/informacio', label: 'Informació' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
