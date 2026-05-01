@@ -225,7 +225,7 @@ export default async function Home({
             Accedeix als teus vídeos de classe, horaris i informació exclusiva per a alumnes.
           </p>
           <a
-            href="/alumnes"
+            href="/alumnes/login"
             className="inline-flex items-center gap-2 bg-white text-[#F59E0B] font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-base"    >
             🎓 Registra&apos;t o accedeix
           </a>
