@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
+import DeleteContacteButton from './DeleteContacteButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -7,7 +8,7 @@ async function eliminarContacte(id: string) {
   'use server'
   const supabase = await createSupabaseServerClient()
   await supabase.from('contactes').delete().eq('id', id)
-  revalidatePath('/admin/contactes')
+  revalidatePath('/admin/contactos')
 }
 
 export default async function ContactosPage() {
@@ -46,7 +47,6 @@ export default async function ContactosPage() {
 
               {/* Botons d'acció */}
               <div className="flex gap-2 mt-4 pt-3 border-t border-zinc-100">
-                {/* Respondre per email */}
                 <a
                   href={`mailto:${c.email}?subject=Re: Autoescola Paris&body=Hola ${c.nom},%0A%0A`}
                   className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
@@ -57,7 +57,6 @@ export default async function ContactosPage() {
                   Respondre
                 </a>
 
-                {/* Trucar */}
                 {c.telefon && (
                   <a
                     href={`tel:${c.telefon}`}
@@ -70,19 +69,9 @@ export default async function ContactosPage() {
                   </a>
                 )}
 
-                {/* Eliminar */}
-                <form action={eliminarContacte.bind(null, c.id)} className="ml-auto">
-                  <button
-                    type="submit"
-                    onClick={() => confirm('Segur que vols eliminar aquest contacte?')}
-                    className="flex items-center gap-1.5 bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-red-200"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    Eliminar
-                  </button>
-                </form>
+                <div className="ml-auto">
+                  <DeleteContacteButton action={eliminarContacte.bind(null, c.id)} />
+                </div>
               </div>
             </div>
           ))}
