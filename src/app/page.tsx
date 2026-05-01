@@ -134,7 +134,7 @@ export default async function Home({
           </h2>
           <p className="text-white/80 text-center mb-10 text-sm">
             Clases online adaptadas a tu agenda ·{' '}
-            <a href="/alumnes" className="underline hover:text-white transition-colors">
+            <a href="/alumnes/login" className="underline hover:text-white transition-colors">
               Regístrate para guardar tu asistencia a la clase. Pulsa Aquí
             </a>
           </p>
