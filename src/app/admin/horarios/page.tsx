@@ -7,12 +7,15 @@ export const dynamic = 'force-dynamic'
 export default async function HorariosPage() {
   const supabase = await createSupabaseServerClient()
 
-  const [{ data: horaris }, { data: assistencies }] = await Promise.all([
+  const [{ data: horaris }, { data: assistencies }, { data: alumnesInfo }] = await Promise.all([
     supabase.from('horaris').select('*').order('dia_setmana'),
-    supabase.from('alumnes_assistencies').select('horari_id, alumne_email, alumnes_autoritzats(nom)'),
+    supabase.from('alumnes_assistencies').select('horari_id, alumne_email'),
+    supabase.from('alumnes_autoritzats').select('email, nom'),
   ])
 
   // Agrupar assistències per horari
+  const nomPerEmail = Object.fromEntries(alumnesInfo?.map((a) => [a.email, a.nom]) ?? [])
+
   const assistenciesPer = (horariId: string) =>
     assistencies?.filter((a) => a.horari_id === horariId) ?? []
 
@@ -76,7 +79,7 @@ export default async function HorariosPage() {
                     <div className="flex flex-wrap gap-2">
                       {llista.map((a) => (
                         <span key={a.alumne_email} className="text-xs bg-white border border-green-200 text-green-700 px-2.5 py-1 rounded-full">
-                          {(a.alumnes_autoritzats as any)?.nom ?? a.alumne_email} · {a.alumne_email}
+                          {nomPerEmail[a.alumne_email] ?? a.alumne_email} · {a.alumne_email}
 
                         </span>
                       ))}
