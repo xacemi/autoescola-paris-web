@@ -13,7 +13,7 @@ export async function sendTelegramWelcomeEmail(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await resend.emails.send({
-      from: 'Autoescola Paris <info@xaviercastello.com>',
+      from: 'Autoescola Paris <hola@autoescolaparis.com>',
       to: emailAlumne,
       subject: '🎓 Benvingut/da! Uneix-te als grups de Telegram',
       html: emailTelegramBenvinguda(nomAlumne),
