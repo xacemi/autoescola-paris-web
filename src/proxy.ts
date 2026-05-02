@@ -27,15 +27,11 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // ─── PROTECCIÓ ZONA ALUMNES ───────────────────────────────────────────────
-  if (pathname.startsWith('/alumnes') &&
-    !pathname.startsWith('/alumnes/login') &&
-    !pathname.includes('_next/static') &&
-    request.method !== 'POST') {
+  if (pathname.startsWith('/alumnes') && !pathname.startsWith('/alumnes/login')) {
     if (!user) {
       return NextResponse.redirect(new URL('/alumnes/login', request.url))
     }
 
-    // Verificar que és alumne (no admin)
     const { data: alumne } = await supabase
       .from('alumnes_autoritzats')
       .select('id')
@@ -54,7 +50,6 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
 
-    // Verificar que és admin
     const { data: admin } = await supabase
       .from('admins')
       .select('id')
