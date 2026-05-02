@@ -14,7 +14,6 @@ export async function registreAlumne(_: unknown, formData: FormData) {
     .from('alumnes_autoritzats')
     .select('*')
     .eq('email', email)
-    .eq('dni', dni)
     .single()
 
   if (!alumne) {
