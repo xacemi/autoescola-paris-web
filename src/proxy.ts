@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = NextResponse.next()
   const { pathname } = request.nextUrl
 
@@ -26,8 +26,7 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // ─── PROTECCIÓ ZONA ALUMNES ────────────────────────────────────────────────
-  // Si intenta accedir a /alumnes (excepte /alumnes/login) sense sessió → login
+  // ─── PROTECCIÓ ZONA ALUMNES ───────────────────────────────────────────────
   if (pathname.startsWith('/alumnes') && !pathname.startsWith('/alumnes/login')) {
     if (!user) {
       return NextResponse.redirect(new URL('/alumnes/login', request.url))
@@ -41,20 +40,18 @@ export async function middleware(request: NextRequest) {
       .single()
 
     if (!alumne) {
-      // Té sessió però no és alumne → tancar sessió i redirigir
       await supabase.auth.signOut()
       return NextResponse.redirect(new URL('/alumnes/login', request.url))
     }
   }
 
   // ─── PROTECCIÓ PANEL ADMIN ────────────────────────────────────────────────
-  // Si intenta accedir a /admin (excepte /admin/login) sense sessió → login admin
   if (pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')) {
     if (!user) {
       return NextResponse.redirect(new URL('/admin/login', request.url))
     }
 
-    // Verificar que és admin (ha d'existir a la taula admins o tenir rol específic)
+    // Verificar que és admin
     const { data: admin } = await supabase
       .from('admins')
       .select('id')
@@ -62,7 +59,6 @@ export async function middleware(request: NextRequest) {
       .single()
 
     if (!admin) {
-      // Té sessió però no és admin → redirigir a alumnes o login
       return NextResponse.redirect(new URL('/alumnes/login', request.url))
     }
   }
