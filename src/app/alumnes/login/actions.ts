@@ -1,7 +1,7 @@
 'use server'
 import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
-import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'  // ← AFEGIT
+import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'
 
 export async function registreAlumne(_: unknown, formData: FormData) {
   const email = formData.get('email') as string
@@ -10,7 +10,6 @@ export async function registreAlumne(_: unknown, formData: FormData) {
   const seu = formData.get('seu') as string
   const supabase = await createSupabaseServerClient()
 
-  // Verificar que l'alumne està autoritzat i no s'ha registrat
   const { data: alumne } = await supabase
     .from('alumnes_autoritzats')
     .select('*')
@@ -26,20 +25,20 @@ export async function registreAlumne(_: unknown, formData: FormData) {
     return { error: 'Aquest alumne ja s\'ha registrat. Inicia sessió.' }
   }
 
-  // Crear compte a Supabase Auth
   const { error: signUpError } = await supabase.auth.signUp({ email, password })
   if (signUpError) {
     return { error: 'Error al crear el compte: ' + signUpError.message }
   }
 
-  // Marcar com a registrat i guardar seu
   await supabase
     .from('alumnes_autoritzats')
     .update({ registrat: true, data_registre: new Date().toISOString(), seu })
     .eq('id', alumne.id)
 
-  // ← AFEGIT: Enviar email de benvinguda amb links de Telegram
-  await sendTelegramWelcomeEmail(email, alumne.nom)
+  // Enviar email amb logs per debugar
+  console.log('📧 Enviant email a:', email, '| Nom:', alumne.nom)
+  const resultat = await sendTelegramWelcomeEmail(email, alumne.nom)
+  console.log('📧 Resultat email:', JSON.stringify(resultat))
 
   redirect('/alumnes')
 }
@@ -54,7 +53,6 @@ export async function loginAlumne(_: unknown, formData: FormData) {
     return { error: 'Credencials incorrectes' }
   }
 
-  // Verificar que és un alumne (no admin)
   const { data: alumne } = await supabase
     .from('alumnes_autoritzats')
     .select('*')
