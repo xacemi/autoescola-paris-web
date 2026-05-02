@@ -27,7 +27,10 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // ─── PROTECCIÓ ZONA ALUMNES ───────────────────────────────────────────────
-  if (pathname.startsWith('/alumnes') && !pathname.startsWith('/alumnes/login')) {
+  if (pathname.startsWith('/alumnes') &&
+    !pathname.startsWith('/alumnes/login') &&
+    !pathname.includes('_next/static') &&
+    request.method !== 'POST') {
     if (!user) {
       return NextResponse.redirect(new URL('/alumnes/login', request.url))
     }
