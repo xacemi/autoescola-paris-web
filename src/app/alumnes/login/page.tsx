@@ -61,6 +61,11 @@ export default function AlumnesLoginPage() {
         {mode === 'registre' && (
           <form action={registreAction} className="flex flex-col gap-4">
             <div>
+              <label className="block text-xs font-semibold text-zinc-700 mb-1.5">Nom complet *</label>
+              <input name="nom" required placeholder="Joan García López"
+                className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6]" />
+            </div>
+            <div>
               <label className="block text-xs font-semibold text-zinc-700 mb-1.5">Email *</label>
               <input name="email" type="email" required placeholder="el_teu@email.com"
                 className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6]" />
@@ -86,7 +91,7 @@ export default function AlumnesLoginPage() {
               {registrePending ? 'Registrant...' : 'Registrar-me'}
             </button>
             <p className="text-xs text-zinc-400 text-center">
-              Necessites estar autoritzat per l&apos;autoescola per registrar-te.
+              El teu compte quedarà pendent d&apos;aprovació per l&apos;autoescola.
             </p>
           </form>
         )}
