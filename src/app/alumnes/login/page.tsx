@@ -8,6 +8,9 @@ export default function AlumnesLoginPage() {
   const [mode, setMode] = useState<'login' | 'registre'>('login')
   const [loginState, loginAction, loginPending] = useActionState(loginAlumne, undefined)
   const [registreState, registreAction, registrePending] = useActionState(registreAlumne, undefined)
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const passwordError = confirmPassword && password !== confirmPassword ? 'Les contrasenyes no coincideixen' : ''
 
   return (
     <div className="min-h-screen bg-[#F4F6FB] flex items-center justify-center px-4">
@@ -71,6 +74,11 @@ export default function AlumnesLoginPage() {
                 className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6]" />
             </div>
             <div>
+              <label className="block text-xs font-semibold text-zinc-700 mb-1.5">DNI *</label>
+              <input name="dni" required placeholder="12345678A"
+                className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6]" />
+            </div>
+            <div>
               <label className="block text-xs font-semibold text-zinc-700 mb-1.5">Seu *</label>
               <select name="seu" required
                 className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] text-zinc-700">
@@ -83,10 +91,22 @@ export default function AlumnesLoginPage() {
             <div>
               <label className="block text-xs font-semibold text-zinc-700 mb-1.5">Contrasenya *</label>
               <input name="password" type="password" required placeholder="Mínim 6 caràcters"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6]" />
             </div>
+            <div>
+              <label className="block text-xs font-semibold text-zinc-700 mb-1.5">Confirma la contrasenya *</label>
+              <input type="password" required placeholder="Repeteix la contrasenya"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] ${passwordError ? 'border-red-400' : 'border-zinc-200'}`} />
+              {passwordError && <p className="text-xs text-red-600 mt-1">{passwordError}</p>}
+            </div>
             {registreState?.error && <p className="text-sm text-red-600">{registreState.error}</p>}
-            <button type="submit" disabled={registrePending}
+            <button
+              type="submit"
+              disabled={registrePending || !!passwordError || !password || !confirmPassword}
               className="bg-[#0110D6] text-white font-semibold py-2.5 rounded-xl hover:bg-blue-800 transition-colors disabled:opacity-50">
               {registrePending ? 'Registrant...' : 'Registrar-me'}
             </button>
