@@ -1,5 +1,6 @@
 'use server'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 
 export async function registreAlumne(_: unknown, formData: FormData) {
@@ -22,13 +23,12 @@ export async function registreAlumne(_: unknown, formData: FormData) {
   }
 
   // Crear compte a Supabase Auth
-  const { data: authData, error: signUpError } = await supabase.auth.signUp({ email, password })
+  const { error: signUpError } = await supabase.auth.signUp({ email, password })
   if (signUpError && signUpError.message !== 'User already registered') {
     return { error: 'Error al crear la cuenta: ' + signUpError.message }
   }
 
   if (existent) {
-    // Actualitzar registre existent a la taula
     await supabase
       .from('alumnes_autoritzats')
       .update({
@@ -41,7 +41,6 @@ export async function registreAlumne(_: unknown, formData: FormData) {
       })
       .eq('id', existent.id)
   } else {
-    // Crear nou registre — tant si és nou a Auth com si ja existia
     await supabase
       .from('alumnes_autoritzats')
       .insert({
@@ -80,7 +79,6 @@ export async function loginAlumne(_: unknown, formData: FormData) {
     return { error: 'Credenciales incorrectas' }
   }
 
-  // Verificar que és alumne
   const { data: alumne } = await supabase
     .from('alumnes_autoritzats')
     .select('aprovat')
@@ -102,6 +100,18 @@ export async function loginAlumne(_: unknown, formData: FormData) {
 
 export async function logoutAlumne() {
   const supabase = await createSupabaseServerClient()
+
+  // Tancar sessió a Supabase
   await supabase.auth.signOut()
-  redirect('/alumnes/login')
+
+  // Netejar totes les cookies de Supabase
+  const cookieStore = await cookies()
+  const allCookies = cookieStore.getAll()
+  allCookies.forEach((cookie) => {
+    if (cookie.name.startsWith('sb-')) {
+      cookieStore.delete(cookie.name)
+    }
+  })
+
+  redirect('/')
 }
