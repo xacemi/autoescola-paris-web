@@ -466,7 +466,7 @@ export default async function Home() {
               <div className="flex items-center gap-3 mb-5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/XaviIcona.png"
+                  src="/images/xavi.png"
                   alt="Xavi Castelló"
                   style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #0110D6', flexShrink: 0 }}
                 />
