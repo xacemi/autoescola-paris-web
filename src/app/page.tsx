@@ -395,7 +395,10 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Sede Lleida</p>
-                  <p className="text-xs text-zinc-500">📍 Rambla d&apos;Aragó, 35, 1er · 25003 Lleida</p>
+                  <div className="text-sm text-zinc-500 leading-snug">
+                    <p>📍 Rambla d&apos;Aragó, 35, 1er</p>
+                    <p className="pl-5">25003 Lleida</p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
@@ -431,7 +434,10 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Sede Mollerussa</p>
-                  <p className="text-xs text-zinc-500">📍 Domènec Cardenal, 1 · 25230 Mollerussa</p>
+                  <div className="text-sm text-zinc-500 leading-snug">
+                    <p>📍 Domènec Cardenal, 1</p>
+                    <p className="pl-5">25230 Mollerussa</p>
+                  </div>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
