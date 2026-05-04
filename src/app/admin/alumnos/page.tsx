@@ -2,10 +2,10 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { createClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 
-// Client d'administrador per eliminar usuaris d'Auth
 function createSupabaseAdmin() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -30,48 +30,22 @@ async function eliminarAlumne(id: string) {
   'use server'
   const supabase = await createSupabaseServerClient()
   const supabaseAdmin = createSupabaseAdmin()
-
-  // Obtenir l'email de l'alumne
-  const { data: alumne } = await supabase
-    .from('alumnes_autoritzats')
-    .select('email')
-    .eq('id', id)
-    .single()
-
-  // Eliminar de la taula
+  const { data: alumne } = await supabase.from('alumnes_autoritzats').select('email').eq('id', id).single()
   await supabase.from('alumnes_autoritzats').delete().eq('id', id)
-
-  // Eliminar de Supabase Auth si té email
   if (alumne?.email) {
     const { data: users } = await supabaseAdmin.auth.admin.listUsers()
     const user = users?.users?.find((u) => u.email === alumne.email)
-    if (user) {
-      await supabaseAdmin.auth.admin.deleteUser(user.id)
-    }
+    if (user) await supabaseAdmin.auth.admin.deleteUser(user.id)
   }
-
   revalidatePath('/admin/alumnos')
 }
 
 async function aprovarAlumne(id: string) {
   'use server'
   const supabase = await createSupabaseServerClient()
-
-  const { data: alumne } = await supabase
-    .from('alumnes_autoritzats')
-    .select('email, nom')
-    .eq('id', id)
-    .single()
-
-  await supabase
-    .from('alumnes_autoritzats')
-    .update({ aprovat: true })
-    .eq('id', id)
-
-  if (alumne?.email && alumne?.nom) {
-    await sendTelegramWelcomeEmail(alumne.email, alumne.nom)
-  }
-
+  const { data: alumne } = await supabase.from('alumnes_autoritzats').select('email, nom').eq('id', id).single()
+  await supabase.from('alumnes_autoritzats').update({ aprovat: true }).eq('id', id)
+  if (alumne?.email && alumne?.nom) await sendTelegramWelcomeEmail(alumne.email, alumne.nom)
   revalidatePath('/admin/alumnos')
 }
 
@@ -79,35 +53,31 @@ async function rebutjarAlumne(id: string) {
   'use server'
   const supabase = await createSupabaseServerClient()
   const supabaseAdmin = createSupabaseAdmin()
-
-  // Obtenir l'email de l'alumne
-  const { data: alumne } = await supabase
-    .from('alumnes_autoritzats')
-    .select('email')
-    .eq('id', id)
-    .single()
-
-  // Eliminar de la taula
+  const { data: alumne } = await supabase.from('alumnes_autoritzats').select('email').eq('id', id).single()
   await supabase.from('alumnes_autoritzats').delete().eq('id', id)
-
-  // Eliminar de Supabase Auth
   if (alumne?.email) {
     const { data: users } = await supabaseAdmin.auth.admin.listUsers()
     const user = users?.users?.find((u) => u.email === alumne.email)
-    if (user) {
-      await supabaseAdmin.auth.admin.deleteUser(user.id)
-    }
+    if (user) await supabaseAdmin.auth.admin.deleteUser(user.id)
   }
-
   revalidatePath('/admin/alumnos')
 }
 
-export default async function AlumnosPage() {
+const sedes = ['Todas', 'Lleida', 'Mollerussa', 'Online']
+
+export default async function AlumnosPage({
+  searchParams,
+}: {
+  searchParams: { sede?: string }
+}) {
   const supabase = await createSupabaseServerClient()
-  const { data: alumnes } = await supabase
-    .from('alumnes_autoritzats')
-    .select('*')
-    .order('data_alta', { ascending: false })
+  const sedeFiltro = searchParams.sede ?? 'Todas'
+
+  let query = supabase.from('alumnes_autoritzats').select('*').order('data_alta', { ascending: false })
+  if (sedeFiltro !== 'Todas') {
+    query = query.eq('seu', sedeFiltro)
+  }
+  const { data: alumnes } = await query
 
   const total = alumnes?.length ?? 0
   const aprovats = alumnes?.filter((a) => a.aprovat).length ?? 0
@@ -118,7 +88,7 @@ export default async function AlumnosPage() {
       <h1 className="text-2xl font-bold text-zinc-800 mb-6">Alumnos</h1>
 
       {/* Estadístiques */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-3 gap-4 mb-6">
         {[
           { label: 'Total', value: total, color: 'bg-blue-50 text-blue-700' },
           { label: 'Aprobados', value: aprovats, color: 'bg-green-50 text-green-700' },
@@ -131,8 +101,27 @@ export default async function AlumnosPage() {
         ))}
       </div>
 
+      {/* Filtre per sede */}
+      <div className="flex gap-2 mb-6 flex-wrap">
+        {sedes.map((sede) => (
+          <Link
+            key={sede}
+            href={sede === 'Todas' ? '/admin/alumnos' : `/admin/alumnos?sede=${sede}`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+              sedeFiltro === sede
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-zinc-600 border border-zinc-200 hover:border-blue-400'
+            }`}
+          >
+            {sede === 'Todas' ? '🌐 Todas' :
+             sede === 'Lleida' ? '📍 Lleida' :
+             sede === 'Mollerussa' ? '📍 Mollerussa' : '💻 Online'}
+          </Link>
+        ))}
+      </div>
+
       {/* Formulari afegir alumne */}
-      <div className="bg-white rounded-xl border border-zinc-200 p-6 shadow-sm mb-8">
+      <div className="bg-white rounded-xl border border-zinc-200 p-6 shadow-sm mb-6">
         <h2 className="text-base font-bold text-zinc-800 mb-4">Añadir alumno autorizado</h2>
         <form action={afegirAlumne} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
@@ -161,7 +150,7 @@ export default async function AlumnosPage() {
 
       {/* Llista d'alumnes */}
       {!alumnes?.length ? (
-        <p className="text-sm text-zinc-500">No hay alumnos todavía.</p>
+        <p className="text-sm text-zinc-500">No hay alumnos{sedeFiltro !== 'Todas' ? ` en ${sedeFiltro}` : ''} todavía.</p>
       ) : (
         <div className="flex flex-col gap-3">
           {alumnes.map((a) => (
