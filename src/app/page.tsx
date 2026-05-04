@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import { createSupabaseServerClient } from '@/lib/supabase-server'
-import { enviarContacte } from './actions'
 import BackToTop from './components/BackToTop'
 import ChatWidget from './components/ChatWidget'
 import ChatMenuButton from './components/ChatMenuButton'
@@ -34,14 +33,7 @@ async function fetchYouTubeVideos(): Promise<YoutubeVideo[]> {
   }
 }
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: Promise<{ enviat?: string }>
-}) {
-  const params = await searchParams
-  const enviat = params.enviat === '1'
-
+export default async function Home() {
   const supabase = await createSupabaseServerClient()
 
   const [{ data: noticies }, { data: permisos }, { data: horaris }, videos] = await Promise.all([
@@ -226,7 +218,7 @@ export default async function Home({
           </p>
           <a
             href="/alumnes/login"
-            className="inline-flex items-center gap-2 bg-white text-[#F59E0B] font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-base"    >
+            className="inline-flex items-center gap-2 bg-white text-[#F59E0B] font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-base">
             🎓 Registra&apos;t o accedeix
           </a>
           <p className="text-white/70 text-xs mt-4">
@@ -243,8 +235,6 @@ export default async function Home({
           <p className="text-white/80 text-center mb-8 text-sm">Zonas de examen, pistas y oficinas</p>
 
           <div className="flex flex-col gap-4">
-
-            {/* Zones d'Examen */}
             <details className="bg-white rounded-2xl shadow-md overflow-hidden group">
               <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
                 <span className="text-2xl">🚦</span>
@@ -262,13 +252,8 @@ export default async function Home({
                   { label: 'Zona Examen 5. Carrer Til·lers - Coches', addr: 'Lleida', lat: 41.6217063, lng: 0.6079476 },
                   { label: 'Pista examens trànsit', addr: 'Lleida', lat: 41.6252336, lng: 0.6646622 },
                 ].map((loc) => (
-                  <a
-                    key={loc.label}
-                    href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors"
-                  >
+                  <a key={loc.label} href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`} target="_blank" rel="noreferrer"
+                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
                     <span className="text-lg">📍</span>
                     <div className="flex-1">
                       <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
@@ -282,7 +267,6 @@ export default async function Home({
               </div>
             </details>
 
-            {/* Pistes de Pràctiques */}
             <details className="bg-white rounded-2xl shadow-md overflow-hidden group">
               <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
                 <span className="text-2xl">🏁</span>
@@ -296,13 +280,8 @@ export default async function Home({
                   { label: 'Pista Camió, Trailer i Autocar', addr: 'Lleida', lat: 41.6099966, lng: 0.5764068 },
                   { label: 'Pista de Pràctiques Moto', addr: 'Lleida', lat: 41.6114358, lng: 0.6420172 },
                 ].map((loc) => (
-                  <a
-                    key={loc.label}
-                    href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors"
-                  >
+                  <a key={loc.label} href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`} target="_blank" rel="noreferrer"
+                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
                     <span className="text-lg">📍</span>
                     <div className="flex-1">
                       <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
@@ -316,7 +295,6 @@ export default async function Home({
               </div>
             </details>
 
-            {/* Oficines */}
             <details className="bg-white rounded-2xl shadow-md overflow-hidden group">
               <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
                 <span className="text-2xl">🏢</span>
@@ -330,13 +308,8 @@ export default async function Home({
                   { label: 'Autoescola Paris Lleida', addr: "Rambla d'Aragó, 35, 1er · 25003 Lleida", lat: 41.6140383, lng: 0.6198683 },
                   { label: 'Autoescola Paris Mollerussa', addr: 'Domènec Cardenal, 1 · 25230 Mollerussa', lat: 41.6297020, lng: 0.8920516 },
                 ].map((loc) => (
-                  <a
-                    key={loc.label}
-                    href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors"
-                  >
+                  <a key={loc.label} href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`} target="_blank" rel="noreferrer"
+                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
                     <span className="text-lg">📍</span>
                     <div className="flex-1">
                       <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
@@ -349,7 +322,6 @@ export default async function Home({
                 ))}
               </div>
             </details>
-
           </div>
         </div>
       </section>
@@ -403,108 +375,76 @@ export default async function Home({
         </div>
       </section>
 
-      {/* ── CONTACTO ── */}
+      {/* ── CONTACTO — sense formulari ── */}
       <section id="contacto" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/Ubicaciones.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-white/60" />
         <div className="relative z-10 max-w-5xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold text-[#1F2937] mb-2 text-center">Contacto</h2>
           <p className="text-zinc-500 text-center mb-10 text-sm">Estamos en dos ubicaciones para atenderte mejor</p>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div>
-              {enviat ? (
-                <div className="bg-green-50 border border-green-200 rounded-2xl p-10 text-center flex flex-col items-center justify-center gap-3">
-                  <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center">
-                    <svg className="w-7 h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <p className="text-green-700 font-bold text-lg">¡Mensaje enviado!</p>
-                  <p className="text-green-600 text-sm">Nos pondremos en contacto contigo pronto.</p>
-                  <a href="/" className="text-sm text-[#0110D6] hover:underline mt-1">Volver al inicio</a>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            {/* Lleida */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#0110D6] rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
                 </div>
-              ) : (
-                <form action={enviarContacte} className="flex flex-col gap-4 bg-white rounded-2xl p-6 shadow-sm border border-purple-100">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-[#1F2937] mb-1.5">Nombre <span className="text-red-500">*</span></label>
-                      <input name="nom" required placeholder="Tu nombre" className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] focus:border-transparent placeholder:text-zinc-400" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-[#1F2937] mb-1.5">Email <span className="text-red-500">*</span></label>
-                      <input name="email" type="email" required placeholder="tu@email.com" className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] focus:border-transparent placeholder:text-zinc-400" />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-[#1F2937] mb-1.5">Teléfono</label>
-                      <input name="telefon" type="tel" placeholder="600 000 000" className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] focus:border-transparent placeholder:text-zinc-400" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-[#1F2937] mb-1.5">Permiso de interés</label>
-                      <select name="permis_interes" className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] focus:border-transparent text-[#1F2937]">
-                        <option value="">Sin preferencia</option>
-                        {permisos?.map((p) => (
-                          <option key={p.id} value={p.tipus_permis}>{p.tipus_permis}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-[#1F2937] mb-1.5">Mensaje <span className="text-red-500">*</span></label>
-                    <textarea name="missatge" required rows={4} placeholder="¿En qué podemos ayudarte?" className="w-full border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] focus:border-transparent placeholder:text-zinc-400 resize-none" />
-                  </div>
-                  <button type="submit" className="bg-[#F59E0B] hover:bg-[#D97706] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm">
-                    Enviar mensaje
-                  </button>
-                </form>
-              )}
-            </div>
-            <div className="flex flex-col gap-4">
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-[#0110D6] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#1F2937]">Sede Lleida</p>
-                    <p className="text-xs text-zinc-500">Oficina principal</p>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 text-sm text-zinc-600">
-                  <p>📍 Rambla d&apos;Aragó, 35, 1er · 25003 Lleida</p>
-                  <p>📞 <a href="tel:+34973269438" className="text-[#0110D6] hover:underline font-medium">973 269 438</a></p>
-                  <p>💬 <a href="https://wa.me/34644499294" className="text-[#0110D6] hover:underline font-medium">644 499 294</a></p>
-                  <p>✉️ <a href="mailto:info@autoescolaparis.com" className="text-[#0110D6] hover:underline">info@autoescolaparis.com</a></p>
+                <div>
+                  <p className="font-bold text-[#1F2937]">Sede Lleida</p>
+                  <p className="text-xs text-zinc-500">Oficina principal</p>
                 </div>
               </div>
-              <div className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-[#F59E0B] rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-bold text-[#1F2937]">Sede Mollerussa</p>
-                    <p className="text-xs text-zinc-500">Segunda sede</p>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 text-sm text-zinc-600">
-                  <p>📍 Domènec Cardenal, 1 · 25230 Mollerussa</p>
-                  <p>📞 <a href="tel:+34973712392" className="text-[#0110D6] hover:underline font-medium">973 712 392</a></p>
-                  <p>💬 <a href="https://wa.me/34640706623" className="text-[#0110D6] hover:underline font-medium">640 706 623</a></p>
-                  <p>✉️ <a href="mailto:mollerussa@autoescolaparis.com" className="text-[#0110D6] hover:underline">mollerussa@autoescolaparis.com</a></p>
-                </div>
-              </div>
-              <div className="bg-white rounded-2xl p-5 border border-purple-100">
-                <p className="font-semibold text-[#1F2937] mb-2 text-sm">Horario de atención</p>
-                <p className="text-sm text-zinc-600">Lunes – Viernes: 10:00–13:00 / 16:00–20:00</p>
+              <div className="flex flex-col gap-3 text-sm text-zinc-600">
+                <p>📍 Rambla d&apos;Aragó, 35, 1er · 25003 Lleida</p>
+                <a href="tel:+34973269438" className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 font-medium text-[#0110D6] transition-colors">
+                  📞 973 269 438
+                </a>
+                <a href="https://wa.me/34644499294" className="flex items-center gap-2 bg-green-50 hover:bg-green-100 rounded-xl px-4 py-3 font-medium text-green-700 transition-colors">
+                  💬 WhatsApp: 644 499 294
+                </a>
+                <a href="mailto:info@autoescolaparis.com" className="flex items-center gap-2 bg-zinc-50 hover:bg-zinc-100 rounded-xl px-4 py-3 font-medium text-zinc-700 transition-colors">
+                  ✉️ info@autoescolaparis.com
+                </a>
               </div>
             </div>
+
+            {/* Mollerussa */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-purple-100">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-[#F59E0B] rounded-lg flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <div>
+                  <p className="font-bold text-[#1F2937]">Sede Mollerussa</p>
+                  <p className="text-xs text-zinc-500">Segunda sede</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-3 text-sm text-zinc-600">
+                <p>📍 Domènec Cardenal, 1 · 25230 Mollerussa</p>
+                <a href="tel:+34973712392" className="flex items-center gap-2 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 font-medium text-[#0110D6] transition-colors">
+                  📞 973 712 392
+                </a>
+                <a href="https://wa.me/34640706623" className="flex items-center gap-2 bg-green-50 hover:bg-green-100 rounded-xl px-4 py-3 font-medium text-green-700 transition-colors">
+                  💬 WhatsApp: 640 706 623
+                </a>
+                <a href="mailto:mollerussa@autoescolaparis.com" className="flex items-center gap-2 bg-zinc-50 hover:bg-zinc-100 rounded-xl px-4 py-3 font-medium text-zinc-700 transition-colors">
+                  ✉️ mollerussa@autoescolaparis.com
+                </a>
+              </div>
+            </div>
+
+            {/* Horari */}
+            <div className="lg:col-span-2 bg-white rounded-2xl p-5 border border-purple-100 text-center">
+              <p className="font-semibold text-[#1F2937] mb-1">🕐 Horario de atención</p>
+              <p className="text-sm text-zinc-600">Lunes – Viernes: 10:00–13:00 / 16:00–20:00</p>
+            </div>
+
           </div>
         </div>
       </section>
@@ -563,6 +503,6 @@ export default async function Home({
       <ChatWidget />
       <InstallPrompt />
 
-    </main >
+    </main>
   )
 }
