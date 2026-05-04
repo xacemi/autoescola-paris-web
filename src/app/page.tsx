@@ -395,7 +395,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Sede Lleida</p>
-                  <a href="https://www.google.com/maps?q=41.6140383,0.6198683" target="_blank" rel="noreferrer"
+                  <a href="https://www.google.com/maps/place/Autoescola+Par%C3%ADs/@41.6140703,0.6199242,21z/data=!4m6!3m5!1s0x12a6e0135a63cea3:0xc835b906fe709f5c!8m2!3d41.614024!4d0.619875!16s%2Fg%2F1v3y4yfr?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer"
                     className="text-sm text-zinc-500 leading-snug hover:text-[#0110D6] transition-colors">
                     <p>📍 Rambla d&apos;Aragó, 35, 1er</p>
                     <p className="pl-5">25003 Lleida</p>
@@ -435,7 +435,7 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Sede Mollerussa</p>
-                  <a href="https://www.google.com/maps?q=41.6297020,0.8920516" target="_blank" rel="noreferrer"
+                  <a href="https://www.google.com/maps/place/Autoescola+PARIS/@41.629759,0.8919115,21z/data=!4m12!1m5!3m4!2zNDHCsDM3JzQ2LjkiTiAwwrA1MyczMS40IkU!8m2!3d41.629702!4d0.8920516!3m5!1s0x12a6eadb70afa267:0x5a77cea332fd6a4c!8m2!3d41.6296564!4d0.8920472!16s%2Fg%2F11bw5vq3zf?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer"
                     className="text-sm text-zinc-500 leading-snug hover:text-[#0110D6] transition-colors">
                     <p>📍 Domènec Cardenal, 1</p>
                     <p className="pl-5">25230 Mollerussa</p>
@@ -502,7 +502,7 @@ export default async function Home() {
             <div>
               <p className="font-semibold mb-3">Lleida</p>
               <div className="flex flex-col gap-1.5 text-sm text-purple-200">
-                <a href="https://www.google.com/maps?q=41.6140383,0.6198683" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Rambla d&apos;Aragó, 35, 1er</a>
+                <a href="https://www.google.com/maps/place/Autoescola+Par%C3%ADs/@41.6140703,0.6199242,21z/data=!4m6!3m5!1s0x12a6e0135a63cea3:0xc835b906fe709f5c!8m2!3d41.614024!4d0.619875!16s%2Fg%2F1v3y4yfr?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Rambla d&apos;Aragó, 35, 1er</a>
                 <a href="tel:+34973269438" className="hover:text-[#F59E0B] transition-colors">📞 973 269 438</a>
                 <a href="https://wa.me/34644499294" className="hover:text-[#F59E0B] transition-colors">💬 644 499 294</a>
                 <a href="mailto:info@autoescolaparis.com" className="hover:text-[#F59E0B] transition-colors">✉️ info@autoescolaparis.com</a>
@@ -511,7 +511,7 @@ export default async function Home() {
             <div>
               <p className="font-semibold mb-3">Mollerussa</p>
               <div className="flex flex-col gap-1.5 text-sm text-purple-200">
-                <a href="https://www.google.com/maps?q=41.6297020,0.8920516" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Domènec Cardenal, 1</a>
+                <a href="https://www.google.com/maps/place/Autoescola+PARIS/@41.629759,0.8919115,21z/data=!4m12!1m5!3m4!2zNDHCsDM3JzQ2LjkiTiAwwrA1MyczMS40IkU!8m2!3d41.629702!4d0.8920516!3m5!1s0x12a6eadb70afa267:0x5a77cea332fd6a4c!8m2!3d41.6296564!4d0.8920472!16s%2Fg%2F11bw5vq3zf?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Domènec Cardenal, 1</a>
                 <a href="tel:+34973712392" className="hover:text-[#F59E0B] transition-colors">📞 973 712 392</a>
                 <a href="https://wa.me/34640706623" className="hover:text-[#F59E0B] transition-colors">💬 640 706 623</a>
                 <a href="mailto:mollerussa@autoescolaparis.com" className="hover:text-[#F59E0B] transition-colors">✉️ mollerussa@autoescolaparis.com</a>
