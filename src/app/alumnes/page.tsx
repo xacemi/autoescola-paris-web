@@ -11,6 +11,12 @@ export default async function AlumnesHomePage() {
     .eq('email', user!.email!)
     .single()
 
+  const { data: enllacos } = await supabase
+    .from('alumnes_enllacos')
+    .select('*')
+    .eq('actiu', true)
+    .order('posicio', { ascending: true })
+
   return (
     <div className="flex flex-col gap-6">
       {/* Bienvenida */}
@@ -35,6 +41,28 @@ export default async function AlumnesHomePage() {
           </Link>
         ))}
       </div>
+
+      {/* Enllaços útils */}
+      {enllacos && enllacos.length > 0 && (
+        <div>
+          <h2 className="text-sm font-bold text-zinc-700 mb-3">🔗 Enlaces útiles</h2>
+          <div className="flex flex-col gap-2">
+            {enllacos.map((e) => (
+              <a
+                key={e.id}
+                href={e.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white rounded-xl p-4 shadow-sm border border-zinc-100 hover:border-[#0110D6] transition-all flex items-center gap-3"
+              >
+                <span className="text-xl">🌐</span>
+                <p className="text-sm font-semibold text-zinc-700">{e.titol}</p>
+                <span className="ml-auto text-zinc-300">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
