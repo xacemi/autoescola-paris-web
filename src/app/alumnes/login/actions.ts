@@ -18,29 +18,30 @@ export async function registreAlumne(_: unknown, formData: FormData) {
     .single()
 
   if (existent?.registrat) {
-    return { error: 'Aquest email ja té un compte. Inicia sessió.' }
+    return { error: 'Este email ya tiene una cuenta. Inicia sesión.' }
   }
 
   // Crear compte a Supabase Auth
-  const { error: signUpError } = await supabase.auth.signUp({ email, password })
-  if (signUpError) {
-    return { error: 'Error al crear el compte: ' + signUpError.message }
+  const { data: authData, error: signUpError } = await supabase.auth.signUp({ email, password })
+  if (signUpError && signUpError.message !== 'User already registered') {
+    return { error: 'Error al crear la cuenta: ' + signUpError.message }
   }
 
   if (existent) {
-    // Actualitzar registre existent
+    // Actualitzar registre existent a la taula
     await supabase
       .from('alumnes_autoritzats')
       .update({
         registrat: true,
         aprovat: false,
+        nom,
         dni,
         data_registre: new Date().toISOString(),
         seu
       })
       .eq('id', existent.id)
   } else {
-    // Crear nou registre pendent
+    // Crear nou registre — tant si és nou a Auth com si ja existia
     await supabase
       .from('alumnes_autoritzats')
       .insert({
@@ -58,7 +59,7 @@ export async function registreAlumne(_: unknown, formData: FormData) {
   const botToken = process.env.TELEGRAM_BOT_TOKEN
   const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID
   if (botToken && chatId) {
-    const missatge = `🆕 Nou alumne registrat!\n\n👤 Nom: ${nom}\n📧 Email: ${email}\n🪪 DNI: ${dni}\n🏫 Seu: ${seu}\n\nAprova'l des del panel admin:\nhttps://app.autoescolaparis.com/admin/alumnos`
+    const missatge = `🆕 Nuevo alumno registrado!\n\n👤 Nombre: ${nom}\n📧 Email: ${email}\n🪪 DNI: ${dni}\n🏫 Sede: ${seu}\n\nAprúebalo desde el panel admin:\nhttps://app.autoescolaparis.com/admin/alumnos`
     await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -76,7 +77,7 @@ export async function loginAlumne(_: unknown, formData: FormData) {
 
   const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) {
-    return { error: 'Credencials incorrectes' }
+    return { error: 'Credenciales incorrectas' }
   }
 
   // Verificar que és alumne
@@ -88,12 +89,12 @@ export async function loginAlumne(_: unknown, formData: FormData) {
 
   if (!alumne) {
     await supabase.auth.signOut()
-    return { error: 'Aquest compte no és un alumne autoritzat.' }
+    return { error: 'Esta cuenta no es un alumno autorizado.' }
   }
 
   if (!alumne.aprovat) {
     await supabase.auth.signOut()
-    return { error: 'El teu compte està pendent d\'aprovació. Aviat rebràs una resposta.' }
+    return { error: 'Tu cuenta está pendiente de aprobación. Pronto recibirás una respuesta.' }
   }
 
   redirect('/alumnes')
