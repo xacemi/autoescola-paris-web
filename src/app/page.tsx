@@ -395,10 +395,11 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Sede Lleida</p>
-                  <div className="text-sm text-zinc-500 leading-snug">
+                  <a href="https://www.google.com/maps?q=41.6140383,0.6198683" target="_blank" rel="noreferrer"
+                    className="text-sm text-zinc-500 leading-snug hover:text-[#0110D6] transition-colors">
                     <p>📍 Rambla d&apos;Aragó, 35, 1er</p>
                     <p className="pl-5">25003 Lleida</p>
-                  </div>
+                  </a>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
@@ -434,10 +435,11 @@ export default async function Home() {
                 </div>
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Sede Mollerussa</p>
-                  <div className="text-sm text-zinc-500 leading-snug">
+                  <a href="https://www.google.com/maps?q=41.6297020,0.8920516" target="_blank" rel="noreferrer"
+                    className="text-sm text-zinc-500 leading-snug hover:text-[#0110D6] transition-colors">
                     <p>📍 Domènec Cardenal, 1</p>
                     <p className="pl-5">25230 Mollerussa</p>
-                  </div>
+                  </a>
                 </div>
               </div>
               <div className="flex flex-col gap-3">
@@ -500,7 +502,7 @@ export default async function Home() {
             <div>
               <p className="font-semibold mb-3">Lleida</p>
               <div className="flex flex-col gap-1.5 text-sm text-purple-200">
-                <p>📍 Rambla d&apos;Aragó, 35, 1er</p>
+                <a href="https://www.google.com/maps?q=41.6140383,0.6198683" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Rambla d&apos;Aragó, 35, 1er</a>
                 <a href="tel:+34973269438" className="hover:text-[#F59E0B] transition-colors">📞 973 269 438</a>
                 <a href="https://wa.me/34644499294" className="hover:text-[#F59E0B] transition-colors">💬 644 499 294</a>
                 <a href="mailto:info@autoescolaparis.com" className="hover:text-[#F59E0B] transition-colors">✉️ info@autoescolaparis.com</a>
@@ -509,7 +511,7 @@ export default async function Home() {
             <div>
               <p className="font-semibold mb-3">Mollerussa</p>
               <div className="flex flex-col gap-1.5 text-sm text-purple-200">
-                <p>📍 Domènec Cardenal, 1</p>
+                <a href="https://www.google.com/maps?q=41.6297020,0.8920516" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Domènec Cardenal, 1</a>
                 <a href="tel:+34973712392" className="hover:text-[#F59E0B] transition-colors">📞 973 712 392</a>
                 <a href="https://wa.me/34640706623" className="hover:text-[#F59E0B] transition-colors">💬 640 706 623</a>
                 <a href="mailto:mollerussa@autoescolaparis.com" className="hover:text-[#F59E0B] transition-colors">✉️ mollerussa@autoescolaparis.com</a>
