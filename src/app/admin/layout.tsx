@@ -8,17 +8,9 @@ const navItems = [
   { href: '/admin/contactos', label: 'Contactos', emoji: '📞' },
   { href: '/admin/alumnos', label: 'Alumnos', emoji: '👥' },
   { href: '/admin/informacio', label: 'Información', emoji: '📋' },
+  { href: '/admin/enlaces', label: 'Enlaces', emoji: '🔗' },
   { href: '/admin/precios', label: 'Precios', emoji: '💰' },
   { href: '/admin/videos', label: 'Vídeos', emoji: '🎬' },
-  { href: '/admin/enlaces', label: 'Enlaces', emoji: '🔗' },
-]
-
-const mobileNavItems = [
-  { href: '/admin', label: 'Inicio', emoji: '🏠' },
-  { href: '/admin/noticias', label: 'Noticias', emoji: '📰' },
-  { href: '/admin/horarios', label: 'Horarios', emoji: '📅' },
-  { href: '/admin/alumnos', label: 'Alumnos', emoji: '👥' },
-  { href: '/admin/informacio', label: 'Info', emoji: '📋' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -31,11 +23,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <p className="font-bold text-sm leading-tight">Autoescuela Paris</p>
           <p className="text-xs text-blue-200">Panel de administración</p>
         </div>
-        <form action={logout}>
-          <button type="submit" className="text-xs text-blue-200 hover:text-white border border-blue-500 px-3 py-1.5 rounded-lg transition-colors">
-            Salir
-          </button>
-        </form>
+        <div className="flex items-center gap-2">
+          <Link href="/admin" className="text-xs text-blue-200 hover:text-white border border-blue-500 px-3 py-1.5 rounded-lg transition-colors">
+            🏠 Inicio
+          </Link>
+          <form action={logout}>
+            <button type="submit" className="text-xs text-blue-200 hover:text-white border border-blue-500 px-3 py-1.5 rounded-lg transition-colors">
+              Salir
+            </button>
+          </form>
+        </div>
       </header>
 
       <div className="flex">
@@ -69,28 +66,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </aside>
 
         {/* CONTINGUT PRINCIPAL */}
-        <main className="flex-1 p-4 md:p-8 overflow-auto pb-24 md:pb-8">
+        <main className="flex-1 p-4 md:p-8 overflow-auto">
           {children}
         </main>
 
       </div>
-
-      {/* MENÚ INFERIOR — només mòbil */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-zinc-200 z-50 shadow-lg">
-        <div className="flex items-center justify-around px-2 py-2">
-          {mobileNavItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl hover:bg-blue-50 transition-colors"
-            >
-              <span className="text-xl">{item.emoji}</span>
-              <span className="text-[10px] font-semibold text-zinc-600">{item.label}</span>
-            </Link>
-          ))}
-        </div>
-      </nav>
-
     </div>
   )
 }
