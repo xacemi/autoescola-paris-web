@@ -1,8 +1,18 @@
 import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { createClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'
 
 export const dynamic = 'force-dynamic'
+
+// Client d'administrador per eliminar usuaris d'Auth
+function createSupabaseAdmin() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  )
+}
 
 async function afegirAlumne(formData: FormData) {
   'use server'
@@ -19,7 +29,27 @@ async function afegirAlumne(formData: FormData) {
 async function eliminarAlumne(id: string) {
   'use server'
   const supabase = await createSupabaseServerClient()
+  const supabaseAdmin = createSupabaseAdmin()
+
+  // Obtenir l'email de l'alumne
+  const { data: alumne } = await supabase
+    .from('alumnes_autoritzats')
+    .select('email')
+    .eq('id', id)
+    .single()
+
+  // Eliminar de la taula
   await supabase.from('alumnes_autoritzats').delete().eq('id', id)
+
+  // Eliminar de Supabase Auth si té email
+  if (alumne?.email) {
+    const { data: users } = await supabaseAdmin.auth.admin.listUsers()
+    const user = users?.users?.find((u) => u.email === alumne.email)
+    if (user) {
+      await supabaseAdmin.auth.admin.deleteUser(user.id)
+    }
+  }
+
   revalidatePath('/admin/alumnos')
 }
 
@@ -48,7 +78,27 @@ async function aprovarAlumne(id: string) {
 async function rebutjarAlumne(id: string) {
   'use server'
   const supabase = await createSupabaseServerClient()
+  const supabaseAdmin = createSupabaseAdmin()
+
+  // Obtenir l'email de l'alumne
+  const { data: alumne } = await supabase
+    .from('alumnes_autoritzats')
+    .select('email')
+    .eq('id', id)
+    .single()
+
+  // Eliminar de la taula
   await supabase.from('alumnes_autoritzats').delete().eq('id', id)
+
+  // Eliminar de Supabase Auth
+  if (alumne?.email) {
+    const { data: users } = await supabaseAdmin.auth.admin.listUsers()
+    const user = users?.users?.find((u) => u.email === alumne.email)
+    if (user) {
+      await supabaseAdmin.auth.admin.deleteUser(user.id)
+    }
+  }
+
   revalidatePath('/admin/alumnos')
 }
 
@@ -71,8 +121,8 @@ export default async function AlumnosPage() {
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[
           { label: 'Total', value: total, color: 'bg-blue-50 text-blue-700' },
-          { label: 'Aprovats', value: aprovats, color: 'bg-green-50 text-green-700' },
-          { label: 'Pendents', value: pendents, color: 'bg-amber-50 text-amber-700' },
+          { label: 'Aprobados', value: aprovats, color: 'bg-green-50 text-green-700' },
+          { label: 'Pendientes', value: pendents, color: 'bg-amber-50 text-amber-700' },
         ].map((s) => (
           <div key={s.label} className={`${s.color} rounded-xl p-4 text-center`}>
             <p className="text-2xl font-bold">{s.value}</p>
@@ -126,7 +176,7 @@ export default async function AlumnosPage() {
                 <p className="font-semibold text-zinc-800 text-sm">{a.nom}</p>
                 <p className="text-xs text-blue-600">{a.email}</p>
                 {a.dni && <p className="text-xs text-zinc-400">DNI: {a.dni}</p>}
-                {a.seu && <p className="text-xs text-zinc-400">Seu: {a.seu}</p>}
+                {a.seu && <p className="text-xs text-zinc-400">Sede: {a.seu}</p>}
               </div>
 
               <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
@@ -134,7 +184,7 @@ export default async function AlumnosPage() {
                 a.registrat ? 'bg-amber-100 text-amber-700' :
                 'bg-zinc-100 text-zinc-600'
               }`}>
-                {a.aprovat ? 'Aprovat' : a.registrat ? 'Pendent aprovació' : 'No registrat'}
+                {a.aprovat ? 'Aprobado' : a.registrat ? 'Pendiente aprobación' : 'No registrado'}
               </span>
 
               <p className="text-xs text-zinc-400 whitespace-nowrap">
@@ -146,7 +196,7 @@ export default async function AlumnosPage() {
                   <form action={aprovarAlumne.bind(null, a.id)}>
                     <button type="submit"
                       className="bg-green-50 hover:bg-green-100 text-green-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-green-200">
-                      ✅ Aprovar
+                      ✅ Aprobar
                     </button>
                   </form>
                 )}
@@ -154,7 +204,7 @@ export default async function AlumnosPage() {
                   <form action={rebutjarAlumne.bind(null, a.id)}>
                     <button type="submit"
                       className="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-red-200">
-                      ❌ Rebutjar
+                      ❌ Rechazar
                     </button>
                   </form>
                 )}
