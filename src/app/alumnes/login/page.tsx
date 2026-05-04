@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from 'react'
 import Image from 'next/image'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase'
 import { loginAlumne, registreAlumne } from './actions'
 
 export default function AlumnesLoginPage() {
@@ -21,7 +21,6 @@ export default function AlumnesLoginPage() {
   async function handleRecover() {
     if (!recoverEmail) return
     setRecoverStatus('loading')
-    const supabase = createClient()
     const { error } = await supabase.auth.resetPasswordForEmail(recoverEmail, {
       redirectTo: `${window.location.origin}/alumnes/reset-password`,
     })
