@@ -464,12 +464,11 @@ export default async function Home() {
             {/* Xavi Castelló — Profesor */}
             <div className="bg-white rounded-2xl p-6 shadow-md border border-zinc-100">
               <div className="flex items-center gap-3 mb-5">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src="/images/XaviIcona.png"
                   alt="Xavi Castelló"
-                  width={48}
-                  height={48}
-                  className="rounded-full object-cover border-2 border-[#0110D6] flex-shrink-0"
+                  style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #0110D6', flexShrink: 0 }}
                 />
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Xavi Castelló</p>
