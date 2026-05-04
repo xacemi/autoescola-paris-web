@@ -464,10 +464,12 @@ export default async function Home() {
             {/* Xavi Castelló — Profesor */}
             <div className="bg-white rounded-2xl p-6 shadow-md border border-zinc-100">
               <div className="flex items-center gap-3 mb-5">
-                <img
+                <Image
                   src="/images/XaviIcona.png"
                   alt="Xavi Castelló"
-                  className="w-12 h-12 rounded-full object-cover border-2 border-[#0110D6] flex-shrink-0"
+                  width={48}
+                  height={48}
+                  className="rounded-full object-cover border-2 border-[#0110D6] flex-shrink-0"
                 />
                 <div>
                   <p className="font-bold text-[#1F2937] text-lg">Xavi Castelló</p>
