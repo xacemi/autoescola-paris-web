@@ -54,7 +54,7 @@ export default function AlumnesLoginPage() {
               onClick={() => { setMode('login'); setRecoverStatus('idle'); setRecoverError('') }}
               className="flex items-center gap-1 text-xs text-zinc-400 hover:text-zinc-600 transition-colors mb-2"
             >
-              ← Volver al inicio de sesión
+              ← Volver al inicio de sesión.
             </button>
             <h2 className="text-sm font-semibold text-zinc-700">Recuperar contraseña</h2>
             {recoverStatus === 'sent' ? (
