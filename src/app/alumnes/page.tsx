@@ -30,7 +30,7 @@ export default async function AlumnesHomePage() {
       <div className="grid grid-cols-2 gap-3">
         {[
           { href: '/alumnes/videos', emoji: '🎬', label: 'Vídeos de clases', desc: 'Repeticiones en línea' },
-          { href: '/alumnes/horaris', emoji: '📅', label: 'Horarios', desc: 'Confirma asistencia' },
+          { href: '/alumnes/horaris', emoji: '📅', label: 'Horarios de clases on line', desc: 'Confirma asistencia' },
           { href: '/alumnes/informacio', emoji: '📋', label: 'Información', desc: 'Examen y documentación' },
         ].map((item) => (
           <Link key={item.href} href={item.href}
