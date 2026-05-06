@@ -9,6 +9,7 @@ export async function registreAlumne(_: unknown, formData: FormData) {
   const nom = (formData.get('nom') as string)?.trim()
   const dni = (formData.get('dni') as string)?.toUpperCase().trim()
   const seu = formData.get('seu') as string
+  const acceptaNotificacions = formData.get('accepta_notificacions') === 'on'
   const supabase = await createSupabaseServerClient()
 
   // Comprovar si ja existeix a la taula
@@ -37,7 +38,8 @@ export async function registreAlumne(_: unknown, formData: FormData) {
         nom,
         dni,
         data_registre: new Date().toISOString(),
-        seu
+        seu,
+        accepta_notificacions: acceptaNotificacions
       })
       .eq('id', existent.id)
   } else {
@@ -50,7 +52,8 @@ export async function registreAlumne(_: unknown, formData: FormData) {
         registrat: true,
         aprovat: false,
         data_registre: new Date().toISOString(),
-        seu
+        seu,
+        accepta_notificacions: acceptaNotificacions
       })
   }
 
