@@ -55,7 +55,13 @@ export default async function AlumnesHomePage() {
                 rel="noopener noreferrer"
                 className="bg-white rounded-xl p-4 shadow-sm border border-zinc-100 hover:border-[#0110D6] transition-all flex items-center gap-3"
               >
-                <span className="text-xl">🌐</span>
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${new URL(e.url).hostname}&sz=32`}
+                  alt=""
+                  width={24}
+                  height={24}
+                  className="rounded-sm"
+                />
                 <p className="text-sm font-semibold text-zinc-700">{e.titol}</p>
                 <span className="ml-auto text-zinc-300">→</span>
               </a>
