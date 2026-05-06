@@ -24,7 +24,7 @@ export async function sendTelegramWelcomeEmail(
       },
       Message: {
         Subject: {
-          Data: '🎓 Benvingut/da! Uneix-te als grups de Telegram',
+          Data: '🎓 ¡Bienvenido/a! Únete a los grupos de Telegram',
           Charset: 'UTF-8',
         },
         Body: {
