@@ -22,7 +22,7 @@ export default function AlumnesLoginPage() {
     if (!recoverEmail) return
     setRecoverStatus('loading')
     const { error } = await supabase.auth.resetPasswordForEmail(recoverEmail, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `https://app.autoescolaparis.com/reset-password`,
     })
     if (error) {
       setRecoverError('No se ha podido enviar el email. Comprueba la dirección.')
