@@ -68,10 +68,11 @@ const sedes = ['Todas', 'Lleida', 'Mollerussa', 'Online']
 export default async function AlumnosPage({
   searchParams,
 }: {
-  searchParams: { sede?: string }
+  searchParams: Promise<{ sede?: string }>
 }) {
   const supabase = await createSupabaseServerClient()
-  const sedeFiltro = searchParams.sede ?? 'Todas'
+  const { sede } = await searchParams
+  const sedeFiltro = sede ?? 'Todas'
 
   let query = supabase.from('alumnes_autoritzats').select('*').order('data_alta', { ascending: false })
   if (sedeFiltro !== 'Todas') {
@@ -107,15 +108,14 @@ export default async function AlumnosPage({
           <Link
             key={sede}
             href={sede === 'Todas' ? '/admin/alumnos' : `/admin/alumnos?sede=${sede}`}
-            className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-              sedeFiltro === sede
+            className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${sedeFiltro === sede
                 ? 'bg-blue-600 text-white'
                 : 'bg-white text-zinc-600 border border-zinc-200 hover:border-blue-400'
-            }`}
+              }`}
           >
             {sede === 'Todas' ? '🌐 Todas' :
-             sede === 'Lleida' ? '📍 Lleida' :
-             sede === 'Mollerussa' ? '📍 Mollerussa' : '💻 Online'}
+              sede === 'Lleida' ? '📍 Lleida' :
+                sede === 'Mollerussa' ? '📍 Mollerussa' : '💻 Online'}
           </Link>
         ))}
       </div>
@@ -155,9 +155,8 @@ export default async function AlumnosPage({
         <div className="flex flex-col gap-3">
           {alumnes.map((a) => (
             <div key={a.id} className="bg-white rounded-xl border border-zinc-200 p-5 shadow-sm flex items-center gap-4 flex-wrap">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                a.aprovat ? 'bg-green-100' : a.registrat ? 'bg-amber-100' : 'bg-zinc-100'
-              }`}>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${a.aprovat ? 'bg-green-100' : a.registrat ? 'bg-amber-100' : 'bg-zinc-100'
+                }`}>
                 <span className="text-lg">{a.aprovat ? '✅' : a.registrat ? '⏳' : '📋'}</span>
               </div>
 
@@ -168,11 +167,10 @@ export default async function AlumnosPage({
                 {a.seu && <p className="text-xs text-zinc-400">Sede: {a.seu}</p>}
               </div>
 
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
-                a.aprovat ? 'bg-green-100 text-green-700' :
-                a.registrat ? 'bg-amber-100 text-amber-700' :
-                'bg-zinc-100 text-zinc-600'
-              }`}>
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${a.aprovat ? 'bg-green-100 text-green-700' :
+                  a.registrat ? 'bg-amber-100 text-amber-700' :
+                    'bg-zinc-100 text-zinc-600'
+                }`}>
                 {a.aprovat ? 'Aprobado' : a.registrat ? 'Pendiente aprobación' : 'No registrado'}
               </span>
 
