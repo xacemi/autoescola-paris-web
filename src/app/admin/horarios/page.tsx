@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { deleteHorario } from './actions'
 
 export const dynamic = 'force-dynamic'
-
+export const revalidate = 0
 export default async function HorariosPage() {
   const supabase = await createSupabaseServerClient()
 
