@@ -34,8 +34,8 @@ export default function AlumnesInformacioPage() {
   if (loading) {
     return (
       <div>
-        <h1 className="text-xl font-bold text-zinc-800">📋 Informació</h1>
-        <p className="text-sm text-zinc-500 mt-1">Carregant...</p>
+        <h1 className="text-xl font-bold text-zinc-800">📋 Información</h1>
+        <p className="text-sm text-zinc-500 mt-1">Cargando...</p>
       </div>
     )
   }
@@ -43,14 +43,14 @@ export default function AlumnesInformacioPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-xl font-bold text-zinc-800">📋 Informació important.</h1>
-        <p className="text-sm text-zinc-500 mt-1">Toca cada apartat per llegir la informació</p>
+        <h1 className="text-xl font-bold text-zinc-800">📋 Información importante.</h1>
+        <p className="text-sm text-zinc-500 mt-1">Toca cada apartado para leer la información</p>
       </div>
 
       {!items.length ? (
         <div className="bg-white rounded-2xl p-8 text-center border border-zinc-100">
           <p className="text-4xl mb-3">📋</p>
-          <p className="text-zinc-500 text-sm">Encara no hi ha informació disponible.</p>
+          <p className="text-zinc-500 text-sm">Aún no existe información disponible.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">

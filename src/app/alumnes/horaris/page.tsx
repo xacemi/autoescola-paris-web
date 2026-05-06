@@ -67,8 +67,8 @@ export default function AlumnesHorarisPage() {
     return (
       <div className="flex flex-col gap-6">
         <div>
-          <h1 className="text-xl font-bold text-zinc-800">📅 Horaris de classe</h1>
-          <p className="text-sm text-zinc-500 mt-1">Carregant...</p>
+          <h1 className="text-xl font-bold text-zinc-800">📅 Horarios de clases on line</h1>
+          <p className="text-sm text-zinc-500 mt-1">Cargando...</p>
         </div>
       </div>
     )
@@ -77,14 +77,14 @@ export default function AlumnesHorarisPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-xl font-bold text-zinc-800">📅 Horaris de classe</h1>
-        <p className="text-sm text-zinc-500 mt-1">Confirma la teva assistència a cada classe</p>
+        <h1 className="text-xl font-bold text-zinc-800">📅 Horarios de clases on line</h1>
+        <p className="text-sm text-zinc-500 mt-1">Confirma tu asistencia a cada clase</p>
       </div>
 
       {!horaris.length ? (
         <div className="bg-white rounded-2xl p-8 text-center border border-zinc-100">
           <p className="text-4xl mb-3">📅</p>
-          <p className="text-zinc-500 text-sm">Encara no hi ha horaris disponibles.</p>
+          <p className="text-zinc-500 text-sm">Aún no existen horarios disponibles.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-3">
@@ -107,11 +107,10 @@ export default function AlumnesHorarisPage() {
                   type="button"
                   disabled={isPending}
                   onClick={() => toggleAssistencia(h.id)}
-                  className={`flex-shrink-0 text-xs font-bold px-4 py-2 rounded-xl transition-all disabled:opacity-50 ${
-                    assisteix
+                  className={`flex-shrink-0 text-xs font-bold px-4 py-2 rounded-xl transition-all disabled:opacity-50 ${assisteix
                       ? 'bg-red-50 hover:bg-red-100 text-red-600 border border-red-200'
                       : 'bg-green-500 hover:bg-green-600 text-white shadow-sm'
-                  }`}
+                    }`}
                 >
                   {isPending ? '...' : assisteix ? '✗ Eliminar assistència' : '✓ Asistiré a la clase'}
                 </button>

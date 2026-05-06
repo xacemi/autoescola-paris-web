@@ -18,14 +18,14 @@ export default async function AlumnesVideosPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-xl font-bold text-zinc-800">🎬 Vídeos de classes</h1>
-        <p className="text-sm text-zinc-500 mt-1">Repeticions de les classes en línia</p>
+        <h1 className="text-xl font-bold text-zinc-800">🎬 Vídeos de clases</h1>
+        <p className="text-sm text-zinc-500 mt-1">Repeticiones de las clases online</p>
       </div>
 
       {!videos?.length ? (
         <div className="bg-white rounded-2xl p-8 text-center border border-zinc-100">
           <p className="text-4xl mb-3">🎬</p>
-          <p className="text-zinc-500 text-sm">Encara no hi ha vídeos disponibles.</p>
+          <p className="text-zinc-500 text-sm">Aún no hay vídeos disponibles.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
