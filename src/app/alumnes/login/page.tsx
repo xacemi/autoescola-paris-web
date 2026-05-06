@@ -13,6 +13,10 @@ export default function AlumnesLoginPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const passwordError = confirmPassword && password !== confirmPassword ? 'Las contraseñas no coinciden' : ''
 
+  // Checkboxes registre
+  const [acceptaPrivacitat, setAcceptaPrivacitat] = useState(false)
+  const [acceptaNotificacions, setAcceptaNotificacions] = useState(false)
+
   // Recuperació de contrasenya
   const [recoverEmail, setRecoverEmail] = useState('')
   const [recoverStatus, setRecoverStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
@@ -172,10 +176,50 @@ export default function AlumnesLoginPage() {
                     className={`w-full border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] ${passwordError ? 'border-red-400' : 'border-zinc-200'}`} />
                   {passwordError && <p className="text-xs text-red-600 mt-1">{passwordError}</p>}
                 </div>
+
+                {/* Checkboxes */}
+                <div className="flex flex-col gap-3 pt-1">
+                  {/* Política de privacitat — obligatori */}
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={acceptaPrivacitat}
+                      onChange={(e) => setAcceptaPrivacitat(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 accent-[#0110D6] flex-shrink-0"
+                    />
+                    <span className="text-xs text-zinc-600 leading-relaxed">
+                      He leído y acepto la{' '}
+                      <a
+                        href="https://autoescolaparis.com/politica-privacidad/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#0110D6] underline hover:text-blue-800"
+                      >
+                        política de privacidad
+                      </a>{' '}
+                      *
+                    </span>
+                  </label>
+
+                  {/* Notificacions push — opcional */}
+                  <label className="flex items-start gap-2.5 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="accepta_notificacions"
+                      checked={acceptaNotificacions}
+                      onChange={(e) => setAcceptaNotificacions(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 accent-[#0110D6] flex-shrink-0"
+                    />
+                    <span className="text-xs text-zinc-600 leading-relaxed">
+                      Acepto recibir notificaciones push sobre clases, exámenes y avisos de la autoescuela
+                    </span>
+                  </label>
+                </div>
+
                 {registreState?.error && <p className="text-sm text-red-600">{registreState.error}</p>}
                 <button
                   type="submit"
-                  disabled={registrePending || !!passwordError || !password || !confirmPassword}
+                  disabled={registrePending || !!passwordError || !password || !confirmPassword || !acceptaPrivacitat}
                   className="bg-[#0110D6] text-white font-semibold py-2.5 rounded-xl hover:bg-blue-800 transition-colors disabled:opacity-50">
                   {registrePending ? 'Registrando...' : 'Registrarme'}
                 </button>
