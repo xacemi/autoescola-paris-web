@@ -25,10 +25,12 @@ async function toggleActiu(id: string, actiu: boolean) {
     revalidatePath('/admin/documentos')
 }
 
-async function actualitzarPosicio(id: string, posicio: number) {
+async function actualitzarPosicio(id: string, formData: FormData) {
     'use server'
     const supabase = await createSupabaseServerClient()
-    await supabase.from('alumnes_documents').update({ posicio }).eq('id', id)
+    await supabase.from('alumnes_documents').update({
+        posicio: Number(formData.get('posicio'))
+    }).eq('id', id)
     revalidatePath('/admin/documentos')
 }
 
@@ -61,9 +63,6 @@ export default async function DocumentosPage() {
                                 <div className="flex flex-col gap-3">
                                     {docs.map((d) => (
                                         <div key={d.id} className="bg-white rounded-xl border border-zinc-200 p-4 shadow-sm flex items-center gap-4 flex-wrap">
-                                            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                                <span className="text-sm font-bold text-blue-600">{d.posicio}</span>
-                                            </div>
                                             <div className="flex-1 min-w-0">
                                                 <p className="font-semibold text-zinc-800 text-sm">{d.titol}</p>
                                                 <p className="text-xs text-blue-500 truncate">{d.url_nextcloud}</p>
@@ -73,17 +72,12 @@ export default async function DocumentosPage() {
                                                 {d.actiu ? 'Activo' : 'Inactivo'}
                                             </span>
                                             <div className="flex gap-2 items-center flex-wrap">
-                                                {/* Editar posició */}
-                                                <form action={actualitzarPosicio.bind(null, d.id, 0)} className="flex gap-1 items-center">
+                                                <form action={actualitzarPosicio.bind(null, d.id)} className="flex gap-1 items-center">
                                                     <input
                                                         name="posicio"
                                                         type="number"
                                                         defaultValue={d.posicio}
                                                         className="w-14 border border-zinc-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        onChange={(e) => {
-                                                            const form = e.target.closest('form') as HTMLFormElement
-                                                            form.action = `/admin/documentos`
-                                                        }}
                                                     />
                                                     <button type="submit"
                                                         className="bg-zinc-50 hover:bg-zinc-100 text-zinc-600 text-xs font-semibold px-2 py-1.5 rounded-lg transition-colors border border-zinc-200">
