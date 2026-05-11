@@ -212,17 +212,17 @@ export default async function Home() {
       <section id="alumnos" className="relative py-16 px-4" style={{ backgroundImage: "url('/images/Alumnos.png')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 bg-[#F59E0B]/80" />
         <div className="relative z-10 max-w-lg mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Zona Alumnes</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">Zona Alumnos</h2>
           <p className="text-white/90 mb-8 text-sm">
-            Accedeix als teus vídeos de classe, horaris i informació exclusiva per a alumnes.
+            Accede a tus vídeos de clase, horarios e información exclusiva para alumnos.
           </p>
           <a
             href="/alumnes/login"
             className="inline-flex items-center gap-2 bg-white text-[#F59E0B] font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-base">
-            🎓 Registra&apos;t o accedeix
+            🎓 🎓 Regístrate o accede
           </a>
           <p className="text-white/70 text-xs mt-4">
-            Necessites estar matriculat a l&apos;Autoescola Paris
+            Necesitas estar matriculado en Autoescola Paris
           </p>
         </div>
       </section>

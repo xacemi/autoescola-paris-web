@@ -18,10 +18,15 @@ export default function AlumnesPendentPage() {
         </div>
         <p className="text-xs text-zinc-400 mt-6">
           Si tienes alguna pregunta contacta con nosotros en{' '}
-          <a href="mailto:director@autoescolaparis.com" className="text-[#0110D6]">
-            director@autoescolaparis.com
+          <a href="mailto:avisos@autoescolaparis.com" className="text-[#0110D6]">
+            avisos@autoescolaparis.com
           </a>
         </p>
+        <a href="/"
+          className="mt-6 inline-block text-xs text-zinc-400 hover:text-zinc-600 transition-colors"
+        >
+          ← Volver al inicio
+        </a>
       </div>
     </div>
   )

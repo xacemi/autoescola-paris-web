@@ -96,7 +96,7 @@ export function emailTelegramBenvinguda(nomAlumne: string): string {
             <td style="background:#F8FAFC;padding:20px 32px;text-align:center;border-top:1px solid #e2e8f0;">
               <p style="color:#94a3b8;font-size:12px;margin:0;line-height:1.6;">
                 Autoescola Paris · Lleida y Mollerussa<br>
-                <a href="mailto:director@autoescolaparis.com" style="color:#0110D6;text-decoration:none;">director@autoescolaparis.com</a>
+                <a href="mailto:avisos@autoescolaparis.com" style="color:#0110D6;text-decoration:none;">avisos@autoescolaparis.com</a>
               </p>
             </td>
           </tr>
