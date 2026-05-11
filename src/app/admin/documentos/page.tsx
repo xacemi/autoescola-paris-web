@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { revalidatePath } from 'next/cache'
+import UploadForm from './UploadForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,19 +10,6 @@ const CATEGORIES = [
     { value: 2, label: 'Seguridad vial' },
     { value: 3, label: 'Conocimiento del vehículo' },
 ]
-
-async function afegirDocument(formData: FormData) {
-    'use server'
-    const supabase = await createSupabaseServerClient()
-    await supabase.from('alumnes_documents').insert({
-        titol: formData.get('titol'),
-        categoria: Number(formData.get('categoria')),
-        url_nextcloud: formData.get('url_nextcloud'),
-        posicio: Number(formData.get('posicio')) || 0,
-        actiu: true,
-    })
-    revalidatePath('/admin/documentos')
-}
 
 async function eliminarDocument(id: string) {
     'use server'
@@ -37,6 +25,13 @@ async function toggleActiu(id: string, actiu: boolean) {
     revalidatePath('/admin/documentos')
 }
 
+async function actualitzarPosicio(id: string, posicio: number) {
+    'use server'
+    const supabase = await createSupabaseServerClient()
+    await supabase.from('alumnes_documents').update({ posicio }).eq('id', id)
+    revalidatePath('/admin/documentos')
+}
+
 export default async function DocumentosPage() {
     const supabase = await createSupabaseServerClient()
     const { data: documents } = await supabase
@@ -49,41 +44,7 @@ export default async function DocumentosPage() {
         <div>
             <h1 className="text-2xl font-bold text-zinc-800 mb-6">Documentos y Resúmenes</h1>
 
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 shadow-sm mb-8">
-                <h2 className="text-base font-bold text-zinc-800 mb-4">Añadir documento</h2>
-                <form action={afegirDocument} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="sm:col-span-2">
-                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">Título *</label>
-                        <input name="titol" required placeholder="Resumen tema 1"
-                            className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">Posición</label>
-                        <input name="posicio" type="number" placeholder="1"
-                            className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div className="sm:col-span-2">
-                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">URL del PDF (Nextcloud) *</label>
-                        <input name="url_nextcloud" type="url" required placeholder="https://nuvol.xaviercastello.com/s/..."
-                            className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">Categoría *</label>
-                        <select name="categoria" required
-                            className="w-full border border-zinc-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-zinc-700">
-                            {CATEGORIES.map((c) => (
-                                <option key={c.value} value={c.value}>{c.label}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="sm:col-span-3">
-                        <button type="submit"
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg text-sm transition-colors">
-                            + Añadir documento
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <UploadForm />
 
             {!documents?.length ? (
                 <p className="text-sm text-zinc-500">No hay documentos todavía.</p>
@@ -111,7 +72,24 @@ export default async function DocumentosPage() {
                                                 }`}>
                                                 {d.actiu ? 'Activo' : 'Inactivo'}
                                             </span>
-                                            <div className="flex gap-2">
+                                            <div className="flex gap-2 items-center flex-wrap">
+                                                {/* Editar posició */}
+                                                <form action={actualitzarPosicio.bind(null, d.id, 0)} className="flex gap-1 items-center">
+                                                    <input
+                                                        name="posicio"
+                                                        type="number"
+                                                        defaultValue={d.posicio}
+                                                        className="w-14 border border-zinc-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        onChange={(e) => {
+                                                            const form = e.target.closest('form') as HTMLFormElement
+                                                            form.action = `/admin/documentos`
+                                                        }}
+                                                    />
+                                                    <button type="submit"
+                                                        className="bg-zinc-50 hover:bg-zinc-100 text-zinc-600 text-xs font-semibold px-2 py-1.5 rounded-lg transition-colors border border-zinc-200">
+                                                        💾
+                                                    </button>
+                                                </form>
                                                 <form action={toggleActiu.bind(null, d.id, d.actiu)}>
                                                     <button type="submit"
                                                         className={`text-xs font-semibold px-3 py-2 rounded-lg transition-colors border ${d.actiu
