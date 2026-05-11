@@ -18,18 +18,8 @@ const CATEGORIES = [
     { value: 3, label: 'Conocimiento del vehículo', emoji: '🚗' },
 ]
 
-function esImatge(url: string): boolean {
-    return /\.(jpg|jpeg|png|webp|gif|svg)(\?|$)/i.test(url)
-}
-
-function esImatgeNextcloud(url: string): boolean {
-    // Nextcloud shared links d'imatges
-    return esImatge(url) || url.includes('/download') && !url.includes('.pdf')
-}
-
 export default function AlumnesDocumentosPage() {
     const [documents, setDocuments] = useState<Document[]>([])
-    const [selected, setSelected] = useState<Document | null>(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -62,39 +52,8 @@ export default function AlumnesDocumentosPage() {
         <div className="flex flex-col gap-6">
             <div>
                 <h1 className="text-xl font-bold text-zinc-800">📄 Documentos y Resúmenes</h1>
-                <p className="text-sm text-zinc-500 mt-1">Consulta los documentos de repaso sin descargarlos</p>
+                <p className="text-sm text-zinc-500 mt-1">Toca un documento para abrirlo</p>
             </div>
-
-            {/* Visor */}
-            {selected && (
-                <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
-                    <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-100">
-                        <p className="font-bold text-sm text-zinc-800">{selected.titol}</p>
-                        <button
-                            onClick={() => setSelected(null)}
-                            className="text-xs text-zinc-400 hover:text-zinc-600 transition-colors"
-                        >
-                            ✕ Cerrar
-                        </button>
-                    </div>
-                    {esImatge(selected.url_nextcloud) ? (
-                        <div className="p-4 flex justify-center">
-                            <img
-                                src={selected.url_nextcloud}
-                                alt={selected.titol}
-                                className="max-w-full rounded-xl"
-                            />
-                        </div>
-                    ) : (
-                        <iframe
-                            src={selected.url_nextcloud}
-                            className="w-full"
-                            style={{ height: '70vh' }}
-                            title={selected.titol}
-                        />
-                    )}
-                </div>
-            )}
 
             {!documents.length ? (
                 <div className="bg-white rounded-2xl p-8 text-center border border-zinc-100">
@@ -116,17 +75,14 @@ export default function AlumnesDocumentosPage() {
                                     {docs.map((d) => (
                                         <button
                                             key={d.id}
-                                            onClick={() => setSelected(selected?.id === d.id ? null : d)}
-                                            className={`bg-white rounded-xl border p-4 shadow-sm flex items-center gap-3 text-left transition-all hover:border-[#0110D6] ${selected?.id === d.id ? 'border-[#0110D6]' : 'border-zinc-100'
-                                                }`}
+                                            onClick={() => window.open(d.url_nextcloud, '_blank')}
+                                            className="bg-white rounded-xl border border-zinc-100 p-4 shadow-sm flex items-center gap-3 text-left transition-all hover:border-[#0110D6]"
                                         >
                                             <span className="text-2xl">
-                                                {esImatge(d.url_nextcloud) ? '🖼️' : '📄'}
+                                                {/\.(jpg|jpeg|png|webp|gif|svg)/i.test(d.url_nextcloud) ? '🖼️' : '📄'}
                                             </span>
                                             <p className="text-sm font-semibold text-zinc-700 flex-1">{d.titol}</p>
-                                            <span className="text-zinc-300 text-xs">
-                                                {selected?.id === d.id ? '▲' : '▼'}
-                                            </span>
+                                            <span className="text-zinc-300 text-xs">→</span>
                                         </button>
                                     ))}
                                 </div>
