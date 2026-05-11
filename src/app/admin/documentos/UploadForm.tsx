@@ -31,7 +31,8 @@ export default function UploadForm() {
 
         // Pujar fitxer a Storage
         const ext = fitxer.name.split('.').pop()
-        const path = `${Date.now()}-${titol.replace(/\s+/g, '-')}.${ext}`
+        const nomFitxer = fitxer.name.replace(/\s+/g, '-')
+        const path = `${Date.now()}-${nomFitxer}`
         const { error: uploadError } = await supabase.storage
             .from('documents')
             .upload(path, fitxer, { upsert: false })
