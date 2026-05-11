@@ -33,6 +33,7 @@ export default async function AlumnesHomePage() {
           { href: '/alumnes/videos', emoji: '🎬', label: 'Vídeos de clases', desc: 'Repeticiones en línea' },
           { href: '/alumnes/horaris', emoji: '📅', label: 'Horarios de clases on line', desc: 'Confirma asistencia' },
           { href: '/alumnes/informacio', emoji: '📋', label: 'Información', desc: 'Examen y documentación' },
+          { href: '/alumnes/documentos', emoji: '📄', label: 'Documentos', desc: 'Resúmenes y apuntes' },
         ].map((item) => (
           <Link key={item.href} href={item.href}
             className="bg-white rounded-2xl p-4 shadow-sm border border-zinc-100 hover:border-[#0110D6] transition-all flex flex-col gap-2">
