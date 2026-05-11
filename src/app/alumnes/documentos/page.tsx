@@ -18,6 +18,15 @@ const CATEGORIES = [
     { value: 3, label: 'Conocimiento del vehículo', emoji: '🚗' },
 ]
 
+function esImatge(url: string): boolean {
+    return /\.(jpg|jpeg|png|webp|gif|svg)(\?|$)/i.test(url)
+}
+
+function esImatgeNextcloud(url: string): boolean {
+    // Nextcloud shared links d'imatges
+    return esImatge(url) || url.includes('/download') && !url.includes('.pdf')
+}
+
 export default function AlumnesDocumentosPage() {
     const [documents, setDocuments] = useState<Document[]>([])
     const [selected, setSelected] = useState<Document | null>(null)
@@ -56,7 +65,7 @@ export default function AlumnesDocumentosPage() {
                 <p className="text-sm text-zinc-500 mt-1">Consulta los documentos de repaso sin descargarlos</p>
             </div>
 
-            {/* Visor PDF */}
+            {/* Visor */}
             {selected && (
                 <div className="bg-white rounded-2xl border border-zinc-100 shadow-sm overflow-hidden">
                     <div className="flex items-center justify-between px-5 py-3 border-b border-zinc-100">
@@ -68,12 +77,22 @@ export default function AlumnesDocumentosPage() {
                             ✕ Cerrar
                         </button>
                     </div>
-                    <iframe
-                        src={selected.url_nextcloud}
-                        className="w-full"
-                        style={{ height: '70vh' }}
-                        title={selected.titol}
-                    />
+                    {esImatge(selected.url_nextcloud) ? (
+                        <div className="p-4 flex justify-center">
+                            <img
+                                src={selected.url_nextcloud}
+                                alt={selected.titol}
+                                className="max-w-full rounded-xl"
+                            />
+                        </div>
+                    ) : (
+                        <iframe
+                            src={selected.url_nextcloud}
+                            className="w-full"
+                            style={{ height: '70vh' }}
+                            title={selected.titol}
+                        />
+                    )}
                 </div>
             )}
 
@@ -101,7 +120,9 @@ export default function AlumnesDocumentosPage() {
                                             className={`bg-white rounded-xl border p-4 shadow-sm flex items-center gap-3 text-left transition-all hover:border-[#0110D6] ${selected?.id === d.id ? 'border-[#0110D6]' : 'border-zinc-100'
                                                 }`}
                                         >
-                                            <span className="text-2xl">📄</span>
+                                            <span className="text-2xl">
+                                                {esImatge(d.url_nextcloud) ? '🖼️' : '📄'}
+                                            </span>
                                             <p className="text-sm font-semibold text-zinc-700 flex-1">{d.titol}</p>
                                             <span className="text-zinc-300 text-xs">
                                                 {selected?.id === d.id ? '▲' : '▼'}
