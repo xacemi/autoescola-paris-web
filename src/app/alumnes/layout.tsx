@@ -46,6 +46,7 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
             { href: '/alumnes/videos', label: '🎬 Vídeos' },
             { href: '/alumnes/horaris', label: '📅 Horarios' },
             { href: '/alumnes/informacio', label: '📋 Información' },
+            { href: '/alumnes/documentos', label: '📄 Documentos' },
           ].map((item) => (
             <Link key={item.href} href={item.href}
               className="whitespace-nowrap text-xs font-semibold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors">
