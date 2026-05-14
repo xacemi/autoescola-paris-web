@@ -9,10 +9,8 @@ export async function POST(req: Request) {
 
     const { subscription, seu } = await req.json()
 
-    // Eliminar subscripció anterior si existeix
     await supabase.from('push_subscriptions').delete().eq('alumne_email', user.email)
 
-    // Guardar nova subscripció
     const { error } = await supabase.from('push_subscriptions').insert({
         alumne_email: user.email,
         seu,

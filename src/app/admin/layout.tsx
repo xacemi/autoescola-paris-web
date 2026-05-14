@@ -12,6 +12,7 @@ const navItems = [
   { href: '/admin/precios', label: 'Precios', emoji: '💰' },
   { href: '/admin/documentos', label: 'Documentos y Resumenes', emoji: '📄' },
   { href: '/admin/videos', label: 'Vídeos', emoji: '🎬' },
+  { href: '/admin/notificaciones', label: 'Notificaciones', emoji: '🔔' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
