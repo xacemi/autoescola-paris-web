@@ -2,6 +2,7 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { logoutAlumne } from './login/actions'
 import Link from 'next/link'
 import Image from 'next/image'
+import PushSubscriber from './PushSubscriber'
 
 export default async function AlumnesLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createSupabaseServerClient()
@@ -23,6 +24,8 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
 
   return (
     <div className="min-h-screen bg-[#F4F6FB]">
+      <PushSubscriber seu={alumne.seu} />
+
       {/* Header */}
       <header className="bg-[#0110D6] text-white sticky top-0 z-50 shadow-sm">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
