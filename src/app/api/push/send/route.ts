@@ -18,6 +18,7 @@ export async function POST(req: Request) {
     }
 
     const { data: subscriptions, error } = await query
+    console.log('Subscripcions trobades:', subscriptions?.length, error)
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
     const payload = JSON.stringify({ title, body, url: url || '/alumnes' })
@@ -26,18 +27,12 @@ export async function POST(req: Request) {
         subscriptions.map((s) => webpush.sendNotification(s.subscription, payload))
     )
 
+    results.forEach((r) => {
+        if (r.status === 'rejected') console.log('Error enviant:', r.reason)
+    })
+
     const enviades = results.filter((r) => r.status === 'fulfilled').length
     const fallides = results.filter((r) => r.status === 'rejected').length
 
     return NextResponse.json({ enviades, fallides })
 }
-const { data: subscriptions, error } = await query
-console.log('Subscripcions trobades:', subscriptions?.length, error)
-
-const results = await Promise.allSettled(
-    subscriptions.map((s) => webpush.sendNotification(s.subscription, payload))
-)
-
-results.forEach((r, i) => {
-    if (r.status === 'rejected') console.log('Error enviant:', r.reason)
-})
