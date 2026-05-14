@@ -51,13 +51,5 @@ export async function POST(req: Request) {
         fallides,
     })
 
-    await supabase.from('push_logs').insert({
-        title,
-        body,
-        seu: seu || 'Todas',
-        enviades,
-        fallides,
-    })
-
     return NextResponse.json({ enviades, fallides })
 }
