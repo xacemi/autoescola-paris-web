@@ -1,10 +1,18 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createBrowserClient } from '@supabase/ssr'
 
 export default function PushSubscriber({ seu }: { seu: string }) {
+    const [mounted, setMounted] = useState(false)
+
     useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        if (!mounted) return
+
         async function subscribeIfNeeded() {
             if (!('serviceWorker' in navigator) || !('PushManager' in window)) return
 
@@ -13,17 +21,14 @@ export default function PushSubscriber({ seu }: { seu: string }) {
 
             const registration = await navigator.serviceWorker.ready
 
-            // Comprovar si ja té subscripció
             const existing = await registration.pushManager.getSubscription()
             if (existing) return
 
-            // Crear nova subscripció
             const subscription = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
             })
 
-            // Guardar a Supabase
             await fetch('/api/push/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -32,7 +37,7 @@ export default function PushSubscriber({ seu }: { seu: string }) {
         }
 
         subscribeIfNeeded()
-    }, [seu])
+    }, [mounted, seu])
 
     return null
 }
