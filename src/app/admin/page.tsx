@@ -8,6 +8,8 @@ const sections = [
   { href: '/admin/informacio', label: 'Información', emoji: '📋', desc: 'Gestionar documentación e información' },
   { href: '/admin/enlaces', label: 'Enlaces', emoji: '🔗', desc: 'Links útiles para los alumnos' },
   { href: '/admin/precios', label: 'Precios', emoji: '💰', desc: 'Actualizar los precios de los servicios' },
+  { href: '/admin/documentos', label: 'Documentos y Resúmenes', emoji: '📄', desc: 'Gestionar documentos PDF per als alumnes' },
+  { href: '/admin/notificaciones', label: 'Notificaciones', emoji: '🔔', desc: 'Enviar notificaciones push als alumnes' },
   { href: '/admin/videos', label: 'Vídeos', emoji: '🎬', desc: 'Gestionar vídeos de clases' },
 ]
 
