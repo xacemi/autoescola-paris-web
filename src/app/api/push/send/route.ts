@@ -42,5 +42,22 @@ export async function POST(req: Request) {
     const enviades = results.filter((r) => r.status === 'fulfilled').length
     const fallides = results.filter((r) => r.status === 'rejected').length
 
+    // Guardar log
+    await supabase.from('push_logs').insert({
+        title,
+        body,
+        seu: seu || 'Todas',
+        enviades,
+        fallides,
+    })
+
+    await supabase.from('push_logs').insert({
+        title,
+        body,
+        seu: seu || 'Todas',
+        enviades,
+        fallides,
+    })
+
     return NextResponse.json({ enviades, fallides })
 }

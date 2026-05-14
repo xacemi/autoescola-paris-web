@@ -1,8 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const SEDES = ['Todas', 'Lleida', 'Mollerussa', 'Online']
+
+type Log = {
+    id: string
+    title: string
+    body: string
+    seu: string
+    enviades: number
+    fallides: number
+    created_at: string
+}
 
 export default function NotificacionesPage() {
     const [title, setTitle] = useState('')
@@ -10,6 +20,19 @@ export default function NotificacionesPage() {
     const [seu, setSeu] = useState('Todas')
     const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
     const [result, setResult] = useState('')
+    const [logs, setLogs] = useState<Log[]>([])
+
+    async function fetchLogs() {
+        const res = await fetch('/api/push/logs')
+        if (res.ok) {
+            const data = await res.json()
+            setLogs(data)
+        }
+    }
+
+    useEffect(() => {
+        fetchLogs()
+    }, [])
 
     async function handleSend() {
         if (!title || !body) return
@@ -31,6 +54,7 @@ export default function NotificacionesPage() {
             setStatus('done')
             setTitle('')
             setBody('')
+            fetchLogs()
         }
     }
 
@@ -38,7 +62,7 @@ export default function NotificacionesPage() {
         <div>
             <h1 className="text-2xl font-bold text-zinc-800 mb-6">Enviar notificación</h1>
 
-            <div className="bg-white rounded-xl border border-zinc-200 p-6 shadow-sm max-w-lg">
+            <div className="bg-white rounded-xl border border-zinc-200 p-6 shadow-sm max-w-lg mb-8">
                 <div className="flex flex-col gap-4">
                     <div>
                         <label className="block text-xs font-semibold text-zinc-600 mb-1.5">Título *</label>
@@ -74,6 +98,31 @@ export default function NotificacionesPage() {
                     </button>
                 </div>
             </div>
+
+            {/* Historial */}
+            <h2 className="text-lg font-bold text-zinc-800 mb-4">Historial de notificaciones</h2>
+            {!logs.length ? (
+                <p className="text-sm text-zinc-500">No hay notificaciones enviadas todavía.</p>
+            ) : (
+                <div className="flex flex-col gap-3 max-w-lg">
+                    {logs.map((log) => (
+                        <div key={log.id} className="bg-white rounded-xl border border-zinc-200 p-4 shadow-sm">
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                                <p className="font-semibold text-zinc-800 text-sm">{log.title}</p>
+                                <span className="text-xs text-zinc-400 whitespace-nowrap">
+                                    {new Date(log.created_at).toLocaleString('es-ES')}
+                                </span>
+                            </div>
+                            <p className="text-xs text-zinc-500 mb-2">{log.body}</p>
+                            <div className="flex items-center gap-3">
+                                <span className="text-xs text-zinc-400">📍 {log.seu}</span>
+                                <span className="text-xs text-green-600">✅ {log.enviades}</span>
+                                <span className="text-xs text-red-500">❌ {log.fallides}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
