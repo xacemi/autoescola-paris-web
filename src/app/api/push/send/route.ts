@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from '@/lib/supabase-server'
+import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import webpush from 'web-push'
 
@@ -8,8 +8,16 @@ webpush.setVapidDetails(
     process.env.VAPID_PRIVATE_KEY!
 )
 
+function createSupabaseAdmin() {
+    return createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        { auth: { autoRefreshToken: false, persistSession: false } }
+    )
+}
+
 export async function POST(req: Request) {
-    const supabase = await createSupabaseServerClient()
+    const supabase = createSupabaseAdmin()
     const { title, body, seu, url } = await req.json()
 
     let query = supabase.from('push_subscriptions').select('subscription')
