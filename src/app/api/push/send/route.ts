@@ -31,3 +31,13 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ enviades, fallides })
 }
+const { data: subscriptions, error } = await query
+console.log('Subscripcions trobades:', subscriptions?.length, error)
+
+const results = await Promise.allSettled(
+    subscriptions.map((s) => webpush.sendNotification(s.subscription, payload))
+)
+
+results.forEach((r, i) => {
+    if (r.status === 'rejected') console.log('Error enviant:', r.reason)
+})
