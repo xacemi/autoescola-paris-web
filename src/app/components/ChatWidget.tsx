@@ -5,8 +5,8 @@ type Message = { role: 'user' | 'assistant'; content: string }
 
 const WELCOME = 'Hola! Soc en París, l\'assistent virtual de l\'Autoescola Paris. En què et puc ajudar avui? 😊'
 
-export default function ChatWidget() {
-  const [open, setOpen] = useState(false)
+export default function ChatWidget({ embedded = false }: { embedded?: boolean }) {
+  const [open, setOpen] = useState(embedded)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -39,7 +39,7 @@ export default function ChatWidget() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/chat', {
+      const res = await fetch('https://app.autoescolaparis.com/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ messages: history }),
@@ -80,29 +80,35 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* Floating button */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Obrir chat amb IA"
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#F59E0B] hover:bg-[#D97706] text-white rounded-full shadow-xl flex items-center justify-center transition-all active:scale-95"
-      >
-        {open ? (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-          </svg>
-        )}
-      </button>
+      {/* Floating button — només si no és embedded */}
+      {!embedded && (
+        <button
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Obrir chat amb IA"
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#F59E0B] hover:bg-[#D97706] text-white rounded-full shadow-xl flex items-center justify-center transition-all active:scale-95"
+        >
+          {open ? (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          ) : (
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+          )}
+        </button>
+      )}
 
       {/* Chat window */}
       <div
-        className={`fixed z-40 flex flex-col bg-white shadow-2xl border border-zinc-200 overflow-hidden transition-all duration-300
-          ${open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}
-          bottom-0 left-0 right-0 h-[100dvh] rounded-none
-          sm:bottom-24 sm:right-6 sm:left-auto sm:w-96 sm:h-[520px] sm:rounded-2xl`}
+        className={
+          embedded
+            ? 'fixed inset-0 flex flex-col bg-white'
+            : `fixed z-40 flex flex-col bg-white shadow-2xl border border-zinc-200 overflow-hidden transition-all duration-300
+              ${open ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none'}
+              bottom-0 left-0 right-0 h-[100dvh] rounded-none
+              sm:bottom-24 sm:right-6 sm:left-auto sm:w-96 sm:h-[520px] sm:rounded-2xl`
+        }
       >
         {/* Header */}
         <div className="bg-[#0110D6] text-white px-4 py-3 flex items-center justify-between flex-shrink-0">
@@ -115,20 +121,21 @@ export default function ChatWidget() {
               <p className="text-xs text-blue-200 mt-0.5">Autoescola Paris</p>
             </div>
           </div>
-          <button
-            onClick={() => setOpen(false)}
-            aria-label="Tancar chat"
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          {!embedded && (
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Tancar chat"
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          )}
         </div>
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
-          {/* Welcome bubble */}
           <div className="flex justify-start">
             <div className="max-w-[85%] bg-zinc-100 text-zinc-800 rounded-2xl rounded-bl-sm px-3 py-2 text-sm leading-relaxed">
               {WELCOME}
@@ -138,11 +145,10 @@ export default function ChatWidget() {
           {messages.map((m, i) => (
             <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div
-                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
-                  m.role === 'user'
+                className={`max-w-[85%] rounded-2xl px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${m.role === 'user'
                     ? 'bg-[#0110D6] text-white rounded-br-sm'
                     : 'bg-zinc-100 text-zinc-800 rounded-bl-sm'
-                }`}
+                  }`}
               >
                 {m.content || (
                   <span className="inline-flex gap-1 items-center h-4">
