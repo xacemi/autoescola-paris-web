@@ -115,7 +115,7 @@ HORARIS OFICINA: 10:00-13:00 i 16:00-20:00 (Lleida i Mollerussa)
 Depèn de l'opció triada, tens 3 o 12 mesos per obtenir el teòric. El Tèoric un cop aprovat, té una durada de 2 anys (el que marca la DGT).
 
 **Hi ha llista d'espera per a les pràctiques?**
-En aquests moments hi ha llista d'espera per comançar les classes pràctiques. Depen del teu horari podràs comançar més aviat o hauras d'esperar una mica més. No podem dir-te un temps exacte. Et recomano contactar amb nosaltres per telèfon o whatssapp per donar-te més informació.
+En aquests moments hi ha llista d'espera per comançar les classes pràctiques. Depen del teu horari, de les hores que queden lliures,del moment en que comencis i del permís que vulguis treure, podràs comançar més aviat o hauras d'esperar una mica més. No podem dir-te un temps exacte. Et recomano contactar amb nosaltres per telèfon o whatssapp per donar-te més informació.
 
 **Puc estar apuntat a una altra autoescola alhora?**
 Sí, pots canviar d'autoescola en qualsevol moment.
