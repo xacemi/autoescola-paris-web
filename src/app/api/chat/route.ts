@@ -69,7 +69,7 @@ HORARIS OFICINA: 10:00-13:00 i 16:00-20:00 (Lleida i Mollerussa)
 ## GARANTIA
 
 - 14 dies de garantia de satisfacció: si no t'agrada, et retornem els diners sense cap pregunta.
-- Més de 20.000 alumnes formats. Professors: Xavi i Cèlia Castelló.
+- Més de 20.000 alumnes formats. Professors: Xavi, Cèlia i Elio.
 
 ---
 
@@ -112,16 +112,19 @@ HORARIS OFICINA: 10:00-13:00 i 16:00-20:00 (Lleida i Mollerussa)
 ## PREGUNTES FREQÜENTS
 
 **Quant temps tinc per treure'm el permís?**
-Depèn de l'opció triada, tens 3 o 12 mesos per obtenir el teòric. El pràctic caduca als 2 anys (el que marca la DGT).
+Depèn de l'opció triada, tens 3 o 12 mesos per obtenir el teòric. El Tèoric un cop aprovat, té una durada de 2 anys (el que marca la DGT).
+
+**Hi ha llista d'espera per a les pràctiques?**
+En aquests moments hi ha llista d'espera per comançar les classes pràctiques. Depen del teu horari podràs comançar més aviat o hauras d'esperar una mica més. No podem dir-te un temps exacte. Et recomano contactar amb nosaltres per telèfon o whatssapp per donar-te més informació.
 
 **Puc estar apuntat a una altra autoescola alhora?**
 Sí, pots canviar d'autoescola en qualsevol moment.
 
 **He de venir presencialment?**
-No és obligatori. Tot es pot fer online. Les seus estan obertes si vols venir en persona.
+No és obligatori. Tot es pot fer online. Les seus estan obertes si vols venir en persona i estrem encantats de veure't.
 
 **Em costa molt estudiar, podré?**
-El tutor t'acompanya des del primer dia amb un pla d'estudi personalitzat fins al final.`
+I tant que si!! De fet, molts dels nostres alumnes venen amb aquesta mateixa preocupació. El tutor t'acompanya des del primer dia amb un pla d'estudi personalitzat fins al final.`
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
