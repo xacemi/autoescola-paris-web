@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { createBrowserClient } from '@supabase/ssr'
 
 export default function PushSubscriber({ seu }: { seu: string }) {
     const [mounted, setMounted] = useState(false)
@@ -21,14 +20,19 @@ export default function PushSubscriber({ seu }: { seu: string }) {
 
             const registration = await navigator.serviceWorker.ready
 
-            const existing = await registration.pushManager.getSubscription()
-            if (existing) return
+            // Obtenir subscripció existent o crear-ne una de nova
+            let subscription = await registration.pushManager.getSubscription()
 
-            const subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
-            })
+            if (!subscription) {
+                // No hi ha subscripció, crear-ne una
+                subscription = await registration.pushManager.subscribe({
+                    userVisibleOnly: true,
+                    applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+                })
+            }
 
+            // SEMPRE enviar la subscripció actual a Supabase
+            // L'API farà un upsert per actualitzar si ja existia
             await fetch('/api/push/subscribe', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
