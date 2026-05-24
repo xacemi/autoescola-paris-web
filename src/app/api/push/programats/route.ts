@@ -1,12 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import webpush from 'web-push'
-
-webpush.setVapidDetails(
-    process.env.VAPID_EMAIL!,
-    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
-    process.env.VAPID_PRIVATE_KEY!
-)
 
 function createSupabaseAdmin() {
     return createClient(
@@ -16,76 +9,41 @@ function createSupabaseAdmin() {
     )
 }
 
-export async function GET(req: Request) {
-    // Protecció: només Vercel pot cridar aquest endpoint
-    const authHeader = req.headers.get('authorization')
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        return NextResponse.json({ error: 'No autoritzat' }, { status: 401 })
-    }
-
+// Llistar programats
+export async function GET() {
     const supabase = createSupabaseAdmin()
-
-    // Obtenir missatges pendents amb hora d'enviament passada
-    const { data: pendents, error } = await supabase
+    const { data, error } = await supabase
         .from('push_programats')
         .select('*')
-        .eq('enviat', false)
-        .lte('enviar_a', new Date().toISOString())
+        .order('enviar_a', { ascending: true })
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-    if (!pendents || pendents.length === 0) return NextResponse.json({ ok: true, enviats: 0 })
+    return NextResponse.json(data)
+}
 
-    for (const missatge of pendents) {
-        // Obtenir subscripcions
-        let query = supabase.from('push_subscriptions').select('id, subscription')
-        if (missatge.seu !== 'Todas') {
-            query = query.eq('seu', missatge.seu)
-        }
-        const { data: subscriptions } = await query
+// Crear programat
+export async function POST(req: Request) {
+    const supabase = createSupabaseAdmin()
+    const { title, body, seu, enviar_a } = await req.json()
 
-        if (!subscriptions || subscriptions.length === 0) {
-            await supabase.from('push_programats')
-                .update({ enviat: true, enviat_a: new Date().toISOString(), enviades: 0, fallides: 0 })
-                .eq('id', missatge.id)
-            continue
-        }
+    const { error } = await supabase.from('push_programats').insert({
+        title, body, seu, enviar_a
+    })
 
-        const payload = JSON.stringify({
-            title: missatge.title,
-            body: missatge.body,
-            url: missatge.url || '/alumnes'
-        })
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ ok: true })
+}
 
-        let enviades = 0
-        let fallides = 0
+// Esborrar programat
+export async function DELETE(req: Request) {
+    const supabase = createSupabaseAdmin()
+    const { searchParams } = new URL(req.url)
+    const id = searchParams.get('id')
 
-        await Promise.all(
-            subscriptions.map(async (s) => {
-                try {
-                    await webpush.sendNotification(s.subscription, payload)
-                    enviades++
-                } catch (err: any) {
-                    fallides++
-                    if (err?.statusCode === 410 || err?.statusCode === 404) {
-                        await supabase.from('push_subscriptions').delete().eq('id', s.id)
-                    }
-                }
-            })
-        )
+    if (!id) return NextResponse.json({ error: 'Falta id' }, { status: 400 })
 
-        // Marcar com a enviat i guardar log
-        await supabase.from('push_programats')
-            .update({ enviat: true, enviat_a: new Date().toISOString(), enviades, fallides })
-            .eq('id', missatge.id)
+    const { error } = await supabase.from('push_programats').delete().eq('id', id)
 
-        await supabase.from('push_logs').insert({
-            title: missatge.title,
-            body: missatge.body,
-            seu: missatge.seu,
-            enviades,
-            fallides,
-        })
-    }
-
-    return NextResponse.json({ ok: true, enviats: pendents.length })
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json({ ok: true })
 }
