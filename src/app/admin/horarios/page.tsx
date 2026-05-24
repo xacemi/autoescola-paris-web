@@ -4,16 +4,16 @@ import { deleteHorario } from './actions'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
 export default async function HorariosPage() {
   const supabase = await createSupabaseServerClient()
 
   const [{ data: horaris }, { data: assistencies }, { data: alumnesInfo }] = await Promise.all([
-    supabase.from('horaris').select('*').order('dia_setmana'),
+    supabase.from('horaris').select('*').order('data', { ascending: true }),
     supabase.from('alumnes_assistencies').select('horari_id, alumne_email'),
     supabase.from('alumnes_autoritzats').select('email, nom'),
   ])
 
-  // Agrupar assistències per horari
   const nomPerEmail = Object.fromEntries(alumnesInfo?.map((a) => [a.email, a.nom]) ?? [])
 
   const assistenciesPer = (horariId: string) =>
@@ -37,13 +37,18 @@ export default async function HorariosPage() {
         <div className="flex flex-col gap-4">
           {horaris.map((h) => {
             const llista = assistenciesPer(h.id)
+            const dataFormatada = new Date(h.data + 'T00:00:00').toLocaleDateString('es-ES', {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })
             return (
               <div key={h.id} className="bg-white rounded-xl border border-zinc-200 shadow-sm overflow-hidden">
-                {/* Capçalera horari */}
                 <div className="px-5 py-4 flex items-center justify-between">
                   <div>
                     <p className="font-medium text-zinc-800">
-                      {h.dia_setmana} · {h.hora_inici}–{h.hora_fi}
+                      {dataFormatada} · {h.hora_inici}–{h.hora_fi}
                       {!h.actiu && <span className="ml-2 text-xs text-zinc-400">(inactivo)</span>}
                     </p>
                     <p className="text-xs text-zinc-500 mt-0.5">
@@ -54,7 +59,6 @@ export default async function HorariosPage() {
                     </p>
                   </div>
                   <div className="flex items-center gap-4">
-                    {/* Comptador assistències */}
                     <span className={`text-xs font-bold px-3 py-1.5 rounded-full ${llista.length > 0 ? 'bg-green-100 text-green-700' : 'bg-zinc-100 text-zinc-500'}`}>
                       👥 {llista.length} {llista.length === 1 ? 'alumne' : 'alumnes'}
                     </span>
@@ -72,7 +76,6 @@ export default async function HorariosPage() {
                   </div>
                 </div>
 
-                {/* Llista d'alumnes que assistiran */}
                 {llista.length > 0 && (
                   <div className="border-t border-zinc-100 px-5 py-3 bg-green-50">
                     <p className="text-xs font-semibold text-zinc-600 mb-2">Alumnes confirmats:</p>
@@ -80,7 +83,6 @@ export default async function HorariosPage() {
                       {llista.map((a) => (
                         <span key={a.alumne_email} className="text-xs bg-white border border-green-200 text-green-700 px-2.5 py-1 rounded-full">
                           {nomPerEmail[a.alumne_email] ?? a.alumne_email} · {a.alumne_email}
-
                         </span>
                       ))}
                     </div>
