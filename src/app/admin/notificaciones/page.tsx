@@ -188,8 +188,8 @@ export default function NotificacionesPage() {
                         </select>
                     </div>
                     <div>
-                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">Data i hora d'enviament *</label>
-                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">(El missatge s'enviara a les 9:00. Si es programa més tard, s'enviara el dia següent.)</label>
+                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">Fecha y Hora de envio *</label>
+                        <label className="block text-xs font-semibold text-zinc-600 mb-1.5">(El mensaje se enviará a las 9:00. Si se programa más tarde, se enviará al día siguiente.)</label>
                         <input
                             type="datetime-local"
                             value={progData}
