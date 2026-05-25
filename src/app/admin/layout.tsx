@@ -11,8 +11,8 @@ const navItems = [
   { href: '/admin/enlaces', label: 'Enlaces', emoji: '🔗' },
   { href: '/admin/precios', label: 'Precios', emoji: '💰' },
   { href: '/admin/documentos', label: 'Documentos y Resumenes', emoji: '📄' },
-  { href: '/admin/videos', label: 'Vídeos', emoji: '🎬' },
   { href: '/admin/notificaciones', label: 'Notificaciones', emoji: '🔔' },
+  { href: '/admin/videos', label: 'Vídeos', emoji: '🎬' },
   { href: '/admin/ubicaciones', label: 'Ubicaciones', emoji: '🗺️' },
 ]
 
