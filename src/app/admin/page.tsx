@@ -11,6 +11,7 @@ const sections = [
   { href: '/admin/documentos', label: 'Documentos y Resúmenes', emoji: '📄', desc: 'Gestionar documentos PDF per als alumnes' },
   { href: '/admin/notificaciones', label: 'Notificaciones', emoji: '🔔', desc: 'Enviar notificaciones push als alumnes' },
   { href: '/admin/videos', label: 'Vídeos', emoji: '🎬', desc: 'Gestionar vídeos de clases' },
+  { href: '/admin/ubicaciones', label: 'Ubicaciones', emoji: '🗺️', desc: 'Gestionar las zonas de examen, pistas i oficinas' },
 ]
 
 export default function AdminDashboard() {
