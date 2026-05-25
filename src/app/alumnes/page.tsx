@@ -34,6 +34,7 @@ export default async function AlumnesHomePage() {
           { href: '/alumnes/horaris', emoji: '📅', label: 'Horarios de clases on line', desc: 'Confirma asistencia' },
           { href: '/alumnes/informacio', emoji: '📋', label: 'Información', desc: 'Examen y documentación' },
           { href: '/alumnes/documentos', emoji: '📄', label: 'Documentos', desc: 'Resúmenes y apuntes' },
+          { href: '/alumnes/ubicacions', emoji: '🗺️', label: 'Ubicaciones', desc: 'Zonas de examen y oficinas' },
         ].map((item) => (
           <Link key={item.href} href={item.href}
             className="bg-white rounded-2xl p-4 shadow-sm border border-zinc-100 hover:border-[#0110D6] transition-all flex flex-col gap-2">
@@ -50,7 +51,7 @@ export default async function AlumnesHomePage() {
           <h2 className="text-sm font-bold text-zinc-700 mb-3">🔗 Enlaces útiles</h2>
           <div className="flex flex-col gap-2">
             {enllacos.map((e) => (
-              <a
+              
                 key={e.id}
                 href={e.url}
                 target="_blank"
