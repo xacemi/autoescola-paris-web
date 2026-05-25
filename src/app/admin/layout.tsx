@@ -13,6 +13,7 @@ const navItems = [
   { href: '/admin/documentos', label: 'Documentos y Resumenes', emoji: '📄' },
   { href: '/admin/videos', label: 'Vídeos', emoji: '🎬' },
   { href: '/admin/notificaciones', label: 'Notificaciones', emoji: '🔔' },
+  { href: '/admin/ubicaciones', label: 'Ubicaciones', emoji: '🗺️' },
 ]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
