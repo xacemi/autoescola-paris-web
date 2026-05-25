@@ -51,7 +51,7 @@ export default async function AlumnesHomePage() {
           <h2 className="text-sm font-bold text-zinc-700 mb-3">🔗 Enlaces útiles</h2>
           <div className="flex flex-col gap-2">
             {enllacos.map((e) => (
-              
+              <a
                 key={e.id}
                 href={e.url}
                 target="_blank"
