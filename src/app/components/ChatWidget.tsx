@@ -74,7 +74,7 @@ export default function ChatWidget({ embedded = false }: { embedded?: boolean })
       })
     } finally {
       setLoading(false)
-      inputRef.current?.focus()
+      setTimeout(() => inputRef.current?.focus(), 50)
     }
   }
 
