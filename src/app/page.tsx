@@ -231,7 +231,7 @@ export default async function Home() {
           <p className="text-white/90 mb-8 text-sm">
             Accede a tus vídeos de clase, horarios e información exclusiva para alumnos.
           </p>
-          
+          <a
             href="/alumnes/login"
             className="inline-flex items-center gap-2 bg-white text-[#F59E0B] font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-base">
             🎓 🎓 Regístrate o accede
