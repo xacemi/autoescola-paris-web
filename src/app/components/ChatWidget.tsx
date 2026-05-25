@@ -3,7 +3,7 @@ import { useState, useRef, useEffect, FormEvent } from 'react'
 
 type Message = { role: 'user' | 'assistant'; content: string }
 
-const WELCOME = 'Hola! Soc en París, l\'assistent virtual de l\'Autoescola Paris. En què et puc ajudar avui? 😊'
+const WELCOME = '¡Hola! Soy París, el asistente virtual de la Autoescola Paris. ¿En qué puedo ayudarte hoy? 😊'
 
 export default function ChatWidget({ embedded = false }: { embedded?: boolean }) {
   const [open, setOpen] = useState(embedded)
@@ -68,7 +68,7 @@ export default function ChatWidget({ embedded = false }: { embedded?: boolean })
         const updated = [...prev]
         updated[updated.length - 1] = {
           role: 'assistant',
-          content: 'Ho sento, ha sorgit un error. Torna-ho a intentar.',
+          content: 'Lo siento, ha ocurrido un error. Por favor, inténtalo de nuevo.',
         }
         return updated
       })
@@ -172,7 +172,7 @@ export default function ChatWidget({ embedded = false }: { embedded?: boolean })
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Escriu un missatge..."
+            placeholder="Escribe un mensaje..."
             disabled={loading}
             className="flex-1 border border-zinc-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#0110D6] focus:border-transparent placeholder:text-zinc-400 disabled:opacity-60"
           />
