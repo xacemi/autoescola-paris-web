@@ -36,7 +36,7 @@ async function fetchYouTubeVideos(): Promise<YoutubeVideo[]> {
 export default async function Home() {
   const supabase = await createSupabaseServerClient()
 
-  const [{ data: noticies }, { data: permisos }, { data: horaris }, videos] = await Promise.all([
+  const [{ data: noticies }, { data: permisos }, { data: horaris }, { data: ubicacions }, videos] = await Promise.all([
     supabase
       .from('noticies')
       .select('id, titol, contingut, data_publicacio')
@@ -50,9 +50,14 @@ export default async function Home() {
       .order('tipus_permis'),
     supabase
       .from('horaris')
-      .select('id, dia_setmana, hora_inici, hora_fi, tipus')
+      .select('id, data, hora_inici, hora_fi, tipus')
       .eq('actiu', true)
-      .order('dia_setmana'),
+      .order('data'),
+    supabase
+      .from('ubicacions')
+      .select('*')
+      .eq('actiu', true)
+      .order('ordre'),
     fetchYouTubeVideos(),
   ])
 
@@ -104,7 +109,7 @@ export default async function Home() {
             { emoji: '🎬', label: 'Vídeos', href: '#videos' },
             { emoji: '📍', label: 'Contacto', href: '#contacto' },
           ].map((item) => (
-            <a
+            
               key={item.href}
               href={item.href}
               className="bg-white rounded-2xl py-4 px-2 flex flex-col items-center gap-2 shadow-md hover:shadow-lg border-2 border-transparent hover:border-[#F59E0B] active:scale-95 transition-all"
@@ -132,20 +137,30 @@ export default async function Home() {
           </p>
           {horaris && horaris.length > 0 ? (
             <div className="flex flex-col gap-3">
-              {horaris.map((h) => (
-                <div key={h.id} className="bg-white rounded-xl border border-purple-100 px-5 py-4 flex items-center justify-between shadow-sm">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-[#0110D6] rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-white text-xs font-bold">{h.dia_setmana?.slice(0, 3).toUpperCase()}</span>
+              {horaris.map((h) => {
+                const dataFormatada = new Date(h.data + 'T00:00:00').toLocaleDateString('es-ES', {
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                })
+                return (
+                  <div key={h.id} className="bg-white rounded-xl border border-purple-100 px-5 py-4 flex items-center justify-between shadow-sm">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 bg-[#0110D6] rounded-lg flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-xs font-bold">
+                          {new Date(h.data + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'short' }).slice(0, 3).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[#1F2937] text-sm">{dataFormatada}</p>
+                        {h.tipus && <p className="text-xs text-zinc-500">{h.tipus}</p>}
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-semibold text-[#1F2937] text-sm">{h.dia_setmana}</p>
-                      {h.tipus && <p className="text-xs text-zinc-500">{h.tipus}</p>}
-                    </div>
+                    <span className="text-[#0110D6] font-bold text-sm tabular-nums">{h.hora_inici} – {h.hora_fi}</span>
                   </div>
-                  <span className="text-[#0110D6] font-bold text-sm tabular-nums">{h.hora_inici} – {h.hora_fi}</span>
-                </div>
-              ))}
+                )
+              })}
             </div>
           ) : (
             <p className="text-center text-white/60 text-sm">Próximamente nuevos horarios.</p>
@@ -216,7 +231,7 @@ export default async function Home() {
           <p className="text-white/90 mb-8 text-sm">
             Accede a tus vídeos de clase, horarios e información exclusiva para alumnos.
           </p>
-          <a
+          
             href="/alumnes/login"
             className="inline-flex items-center gap-2 bg-white text-[#F59E0B] font-bold px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl active:scale-95 transition-all text-base">
             🎓 🎓 Regístrate o accede
@@ -234,91 +249,39 @@ export default async function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 text-center">Ubicaciones</h2>
           <p className="text-white/80 text-center mb-8 text-sm">Zonas de examen, pistas y oficinas</p>
           <div className="flex flex-col gap-4">
-            <details className="bg-white rounded-2xl shadow-md overflow-hidden group">
-              <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
-                <span className="text-2xl">🚦</span>
-                <span className="font-bold text-[#1F2937] flex-1">Zonas de Examen</span>
-                <svg className="w-5 h-5 text-[#0110D6] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="flex flex-col gap-2 px-4 pb-4">
-                {[
-                  { label: "Zona Examen Teórico. Oficina de Tráfico", addr: "Lleida", lat: 41.6209429, lng: 0.6121967 },
-                  { label: "Zona Examen 1", addr: "Passeig de l'Onze de Setembre, 67", lat: 41.6214687, lng: 0.6096928 },
-                  { label: 'Zona Examen 2. Bombers. Vehículos Pesados y Motos', addr: 'Partida Vallcalent, Lleida', lat: 41.6224336, lng: 0.6056248 },
-                  { label: 'Zona Examen 4', addr: 'C. Alcarras, 13-3, Lérida', lat: 41.6139831, lng: 0.6580825 },
-                  { label: 'Zona Examen 5. Carrer Til·lers - Coches', addr: 'Lleida', lat: 41.6217063, lng: 0.6079476 },
-                  { label: 'Pista examens trànsit', addr: 'Lleida', lat: 41.6252336, lng: 0.6646622 },
-                ].map((loc) => (
-                  <a key={loc.label} href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`} target="_blank" rel="noreferrer"
-                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
-                    <span className="text-lg">📍</span>
-                    <div className="flex-1">
-                      <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
-                      <p className="text-xs text-zinc-500">{loc.addr}</p>
-                    </div>
-                    <svg className="w-4 h-4 text-[#0110D6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            {[
+              { key: 'examens', emoji: '🚦', title: 'Zonas de Examen' },
+              { key: 'pistes', emoji: '🏁', title: 'Pistas de Prácticas' },
+              { key: 'oficines', emoji: '🏢', title: 'Nuestras Oficinas' },
+            ].map(({ key, emoji, title }) => {
+              const llocs = ubicacions?.filter((u) => u.categoria === key) ?? []
+              return (
+                <details key={key} className="bg-white rounded-2xl shadow-md overflow-hidden group">
+                  <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
+                    <span className="text-2xl">{emoji}</span>
+                    <span className="font-bold text-[#1F2937] flex-1">{title}</span>
+                    <svg className="w-5 h-5 text-[#0110D6] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
-                  </a>
-                ))}
-              </div>
-            </details>
-            <details className="bg-white rounded-2xl shadow-md overflow-hidden group">
-              <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
-                <span className="text-2xl">🏁</span>
-                <span className="font-bold text-[#1F2937] flex-1">Pistas de Prácticas</span>
-                <svg className="w-5 h-5 text-[#0110D6] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="flex flex-col gap-2 px-4 pb-4">
-                {[
-                  { label: 'Pista Camió, Trailer i Autocar', addr: 'Lleida', lat: 41.6099966, lng: 0.5764068 },
-                  { label: 'Pista de Pràctiques Moto', addr: 'Lleida', lat: 41.6114358, lng: 0.6420172 },
-                ].map((loc) => (
-                  <a key={loc.label} href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`} target="_blank" rel="noreferrer"
-                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
-                    <span className="text-lg">📍</span>
-                    <div className="flex-1">
-                      <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
-                      <p className="text-xs text-zinc-500">{loc.addr}</p>
-                    </div>
-                    <svg className="w-4 h-4 text-[#0110D6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                ))}
-              </div>
-            </details>
-            <details className="bg-white rounded-2xl shadow-md overflow-hidden group">
-              <summary className="flex items-center gap-3 px-5 py-4 cursor-pointer select-none">
-                <span className="text-2xl">🏢</span>
-                <span className="font-bold text-[#1F2937] flex-1">Nuestras Oficinas</span>
-                <svg className="w-5 h-5 text-[#0110D6] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </summary>
-              <div className="flex flex-col gap-2 px-4 pb-4">
-                {[
-                  { label: 'Autoescola Paris Lleida', addr: "Rambla d'Aragó, 35, 1er · 25003 Lleida", lat: 41.6140383, lng: 0.6198683 },
-                  { label: 'Autoescola Paris Mollerussa', addr: 'Domènec Cardenal, 1 · 25230 Mollerussa', lat: 41.6297020, lng: 0.8920516 },
-                ].map((loc) => (
-                  <a key={loc.label} href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`} target="_blank" rel="noreferrer"
-                    className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
-                    <span className="text-lg">📍</span>
-                    <div className="flex-1">
-                      <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
-                      <p className="text-xs text-zinc-500">{loc.addr}</p>
-                    </div>
-                    <svg className="w-4 h-4 text-[#0110D6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                  </a>
-                ))}
-              </div>
-            </details>
+                  </summary>
+                  <div className="flex flex-col gap-2 px-4 pb-4">
+                    {llocs.map((loc) => (
+                      <a key={loc.id} href={loc.url_maps} target="_blank" rel="noreferrer"
+                        className="flex items-center gap-3 bg-blue-50 hover:bg-blue-100 rounded-xl px-4 py-3 transition-colors">
+                        <span className="text-lg">📍</span>
+                        <div className="flex-1">
+                          <p className="font-semibold text-[#1F2937] text-sm">{loc.label}</p>
+                          {loc.adreca && <p className="text-xs text-zinc-500">{loc.adreca}</p>}
+                        </div>
+                        <svg className="w-4 h-4 text-[#0110D6]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    ))}
+                  </div>
+                </details>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -461,7 +424,7 @@ export default async function Home() {
               </div>
             </div>
 
-            {/* Xavi Castelló — Profesor */}
+            {/* Xavi Castelló */}
             <div className="bg-white rounded-2xl p-6 shadow-md border border-zinc-100">
               <div className="flex items-center gap-3 mb-5">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -495,7 +458,6 @@ export default async function Home() {
               <p className="font-semibold text-[#1F2937] mb-1">🕐 Horario de atención</p>
               <p className="text-sm text-zinc-600">Lunes – Viernes: 10:00–13:00 / 16:00–20:00</p>
             </div>
-
           </div>
         </div>
       </section>
@@ -528,7 +490,7 @@ export default async function Home() {
             <div>
               <p className="font-semibold mb-3">Lleida</p>
               <div className="flex flex-col gap-1.5 text-sm text-purple-200">
-                <a href="https://www.google.com/maps/place/Autoescola+Par%C3%ADs/@41.6140703,0.6199242,21z/data=!4m6!3m5!1s0x12a6e0135a63cea3:0xc835b906fe709f5c!8m2!3d41.614024!4d0.619875!16s%2Fg%2F1v3y4yfr?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Rambla d&apos;Aragó, 35, 1er</a>
+                <a href="https://www.google.com/maps/place/Autoescola+Par%C3%ADs/@41.6140703,0.6199242,21z" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Rambla d&apos;Aragó, 35, 1er</a>
                 <a href="tel:+34973269438" className="hover:text-[#F59E0B] transition-colors">📞 973 269 438</a>
                 <a href="https://wa.me/34644499294" className="hover:text-[#F59E0B] transition-colors">💬 644 499 294</a>
                 <a href="mailto:info@autoescolaparis.com" className="hover:text-[#F59E0B] transition-colors">✉️ info@autoescolaparis.com</a>
@@ -537,7 +499,7 @@ export default async function Home() {
             <div>
               <p className="font-semibold mb-3">Mollerussa</p>
               <div className="flex flex-col gap-1.5 text-sm text-purple-200">
-                <a href="https://www.google.com/maps/place/Autoescola+PARIS/@41.629759,0.8919115,21z/data=!4m12!1m5!3m4!2zNDHCsDM3JzQ2LjkiTiAwwrA1MyczMS40IkU!8m2!3d41.629702!4d0.8920516!3m5!1s0x12a6eadb70afa267:0x5a77cea332fd6a4c!8m2!3d41.6296564!4d0.8920472!16s%2Fg%2F11bw5vq3zf?entry=ttu&g_ep=EgoyMDI2MDQyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Domènec Cardenal, 1</a>
+                <a href="https://www.google.com/maps/place/Autoescola+PARIS/@41.629759,0.8919115,21z" target="_blank" rel="noreferrer" className="hover:text-[#F59E0B] transition-colors">📍 Domènec Cardenal, 1</a>
                 <a href="tel:+34973712392" className="hover:text-[#F59E0B] transition-colors">📞 973 712 392</a>
                 <a href="https://wa.me/34640706623" className="hover:text-[#F59E0B] transition-colors">💬 640 706 623</a>
                 <a href="mailto:mollerussa@autoescolaparis.com" className="hover:text-[#F59E0B] transition-colors">✉️ mollerussa@autoescolaparis.com</a>
