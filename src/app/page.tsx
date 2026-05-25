@@ -100,7 +100,7 @@ export default async function Home() {
       {/* ── MENÚ PRINCIPAL ── */}
       <section className="px-4 py-6 -mt-1 bg-[#0110D6]">
         <div className="max-w-md mx-auto grid grid-cols-3 gap-3 pb-2">
-          {[
+        {[
             { emoji: '📅', label: 'Horarios', href: '#horarios' },
             { emoji: '📰', label: 'Noticias', href: '#noticias' },
             { emoji: '🚗', label: 'Permisos', href: '#permisos' },
@@ -109,7 +109,7 @@ export default async function Home() {
             { emoji: '🎬', label: 'Vídeos', href: '#videos' },
             { emoji: '📍', label: 'Contacto', href: '#contacto' },
           ].map((item) => (
-            
+            <a
               key={item.href}
               href={item.href}
               className="bg-white rounded-2xl py-4 px-2 flex flex-col items-center gap-2 shadow-md hover:shadow-lg border-2 border-transparent hover:border-[#F59E0B] active:scale-95 transition-all"
