@@ -37,12 +37,22 @@ async function eliminarAlumne(id: string) {
   const supabase = await createSupabaseServerClient()
   const supabaseAdmin = createSupabaseAdmin()
   const { data: alumne } = await supabase.from('alumnes_autoritzats').select('email').eq('id', id).single()
+
+  // Esborrar assistències
+  if (alumne?.email) {
+    await supabase.from('alumnes_assistencies').delete().eq('alumne_email', alumne.email)
+  }
+
+  // Esborrar de la taula d'alumnes
   await supabase.from('alumnes_autoritzats').delete().eq('id', id)
+
+  // Esborrar de Supabase Auth
   if (alumne?.email) {
     const { data: users } = await supabaseAdmin.auth.admin.listUsers()
     const user = users?.users?.find((u) => u.email === alumne.email)
     if (user) await supabaseAdmin.auth.admin.deleteUser(user.id)
   }
+
   revalidatePath('/admin/alumnos')
 }
 
@@ -202,9 +212,16 @@ export default async function AlumnosPage({
         <div className="flex flex-col gap-3">
           {alumnes.map((a) => (
             <div key={a.id} className="bg-white rounded-xl border border-zinc-200 p-5 shadow-sm flex items-center gap-4 flex-wrap">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${a.aprovat ? 'bg-green-100' : a.registrat ? 'bg-amber-100' : 'bg-zinc-100'
-                }`}>
-                <span className="text-lg">{a.aprovat ? '✅' : a.registrat ? '⏳' : '📋'}</span>
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                a.aprovat && a.registrat ? 'bg-green-100' :
+                a.aprovat && !a.registrat ? 'bg-blue-100' :
+                a.registrat ? 'bg-amber-100' : 'bg-zinc-100'
+              }`}>
+                <span className="text-lg">
+                  {a.aprovat && a.registrat ? '✅' :
+                   a.aprovat && !a.registrat ? '📋' :
+                   a.registrat ? '⏳' : '📋'}
+                </span>
               </div>
 
               <div className="flex-1">
@@ -214,14 +231,15 @@ export default async function AlumnosPage({
                 {a.seu && <p className="text-xs text-zinc-400">Sede: {a.seu}</p>}
               </div>
 
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${a.aprovat && a.registrat ? 'bg-green-100 text-green-700' :
-                  a.aprovat && !a.registrat ? 'bg-blue-100 text-blue-700' :
-                  a.registrat ? 'bg-amber-100 text-amber-700' :
-                    'bg-zinc-100 text-zinc-600'
-                }`}>
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${
+                a.aprovat && a.registrat ? 'bg-green-100 text-green-700' :
+                a.aprovat && !a.registrat ? 'bg-blue-100 text-blue-700' :
+                a.registrat ? 'bg-amber-100 text-amber-700' :
+                'bg-zinc-100 text-zinc-600'
+              }`}>
                 {a.aprovat && a.registrat ? 'Aprobado' :
-                  a.aprovat && !a.registrat ? 'Pendiente registro' :
-                  a.registrat ? 'Pendiente aprobación' : 'No registrado'}
+                 a.aprovat && !a.registrat ? 'Pendiente registro' :
+                 a.registrat ? 'Pendiente aprobación' : 'No registrado'}
               </span>
 
               <p className="text-xs text-zinc-400 whitespace-nowrap">
@@ -229,10 +247,9 @@ export default async function AlumnosPage({
               </p>
 
               <div className="flex gap-2 flex-wrap">
-                {/* Enviar invitació — alumnes aprovats però no registrats */}
                 {a.aprovat && !a.registrat && (
-  <InvitacioButton action={enviarInvitacio.bind(null, a.id)} />
-)}
+                  <InvitacioButton action={enviarInvitacio.bind(null, a.id)} />
+                )}
                 {a.registrat && !a.aprovat && (
                   <form action={aprovarAlumne.bind(null, a.id)}>
                     <button type="submit"
