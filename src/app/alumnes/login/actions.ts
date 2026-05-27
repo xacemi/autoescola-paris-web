@@ -30,11 +30,18 @@ export async function registreAlumne(_: unknown, formData: FormData) {
   }
 
   if (existent) {
+    // Obtenir el valor actual d'aprovat per no sobreescriure'l
+    const { data: alumneActual } = await supabase
+      .from('alumnes_autoritzats')
+      .select('aprovat')
+      .eq('id', existent.id)
+      .single()
+
     await supabase
       .from('alumnes_autoritzats')
       .update({
         registrat: true,
-        aprovat: false,
+        aprovat: alumneActual?.aprovat ?? false,
         nom,
         dni,
         data_registre: new Date().toISOString(),
@@ -42,19 +49,11 @@ export async function registreAlumne(_: unknown, formData: FormData) {
         accepta_notificacions: acceptaNotificacions
       })
       .eq('id', existent.id)
-  } else {
-    await supabase
-      .from('alumnes_autoritzats')
-      .insert({
-        nom,
-        email,
-        dni,
-        registrat: true,
-        aprovat: false,
-        data_registre: new Date().toISOString(),
-        seu,
-        accepta_notificacions: acceptaNotificacions
-      })
+
+    // Si ja estava aprovat, redirigir directament sense passar per pendent
+    if (alumneActual?.aprovat) {
+      redirect('/alumnes')
+    }
   }
 
   // Notificació a Xavi via Telegram
