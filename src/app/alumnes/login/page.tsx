@@ -218,8 +218,8 @@ export default function AlumnesLoginPage() {
                       className="mt-0.5 w-4 h-4 accent-[#0110D6] flex-shrink-0"
                     />
                     <span className="text-xs text-zinc-600 leading-relaxed">
-                      Acepto recibir notificaciones push sobre clases, exámenes y avisos de la autoescuela
-                    </span>
+  Acepto recibir notificaciones push sobre horarios de clase, fechas de examen y comunicados importantes de la autoescuela. Puedes desactivarlas en cualquier momento desde los ajustes de tu dispositivo.
+</span>
                   </label>
                 </div>
 
