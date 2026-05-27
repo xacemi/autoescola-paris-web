@@ -50,10 +50,25 @@ export async function registreAlumne(_: unknown, formData: FormData) {
       })
       .eq('id', existent.id)
 
-    // Si ja estava aprovat, redirigir directament sense passar per pendent
+    // Si ja estava aprovat, redirigir directament
     if (alumneActual?.aprovat) {
       redirect('/alumnes')
     }
+
+    // Si no estava aprovat, notificar i redirigir a pendent
+    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID
+    if (botToken && chatId) {
+      const missatge = `🆕 Nuevo alumno registrado!\n\n👤 Nombre: ${nom}\n📧 Email: ${email}\n🪪 DNI: ${dni}\n🏫 Sede: ${seu}\n\nAprúebalo desde el panel admin:\nhttps://app.autoescolaparis.com/admin/alumnos`
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: missatge })
+      })
+    }
+
+    redirect('/alumnes/pendent')
+
   } else {
     // Alumne nou — inserir a la taula
     await supabase
@@ -69,21 +84,21 @@ export async function registreAlumne(_: unknown, formData: FormData) {
         seu,
         accepta_notificacions: acceptaNotificacions
       })
-  }
 
-  // Notificació a Xavi via Telegram
-  const botToken = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID
-  if (botToken && chatId) {
-    const missatge = `🆕 Nuevo alumno registrado!\n\n👤 Nombre: ${nom}\n📧 Email: ${email}\n🪪 DNI: ${dni}\n🏫 Sede: ${seu}\n\nAprúebalo desde el panel admin:\nhttps://app.autoescolaparis.com/admin/alumnos`
-    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text: missatge })
-    })
-  }
+    // Notificació Telegram
+    const botToken = process.env.TELEGRAM_BOT_TOKEN
+    const chatId = process.env.TELEGRAM_ADMIN_CHAT_ID
+    if (botToken && chatId) {
+      const missatge = `🆕 Nuevo alumno registrado!\n\n👤 Nombre: ${nom}\n📧 Email: ${email}\n🪪 DNI: ${dni}\n🏫 Sede: ${seu}\n\nAprúebalo desde el panel admin:\nhttps://app.autoescolaparis.com/admin/alumnos`
+      await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: missatge })
+      })
+    }
 
-  redirect('/alumnes/pendent')
+    redirect('/alumnes/pendent')
+  }
 }
 
 export async function loginAlumne(_: unknown, formData: FormData) {
