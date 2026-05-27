@@ -51,10 +51,10 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
             </Link>
           ))}
         </nav>
-
-        {/* Banner notificacions — just sota el nav, dins del header sticky */}
-        <PushSubscriber seu={alumne.seu} />
       </header>
+
+      {/* Banner notificacions — fora del header */}
+      <PushSubscriber seu={alumne.seu} />
 
       <main className="max-w-lg mx-auto px-4 py-6">
         {children}
