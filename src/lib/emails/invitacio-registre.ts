@@ -38,7 +38,7 @@ export function emailInvitacioRegistre(nomAlumne: string): string {
                 </p>
   
                 <!-- PASOS -->
-                <table width="100%" cellpadding="0" cellspacing="0" style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;margin-bottom:28px;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;margin-bottom:16px;">
                   <tr>
                     <td style="padding:20px 24px;">
                       <strong style="color:#1e40af;font-size:15px;">¿Cómo acceder?</strong>
@@ -53,12 +53,50 @@ export function emailInvitacioRegistre(nomAlumne: string): string {
                 </table>
   
                 <!-- BOTÓ REGISTRE -->
-                <div style="text-align:center;">
+                <div style="text-align:center;margin-bottom:28px;">
                   <a href="https://app.autoescolaparis.com/alumnes/login" 
                      style="display:inline-block;background:#F59E0B;color:#ffffff;text-decoration:none;padding:14px 40px;border-radius:10px;font-size:16px;font-weight:700;">
                     🎓 Crear mi cuenta
                   </a>
                 </div>
+  
+                <!-- CANAL AVISOS -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;margin-bottom:16px;">
+                  <tr>
+                    <td style="padding:20px 24px;">
+                      <div style="margin-bottom:8px;">
+                        <span style="font-size:24px;margin-right:10px;">📢</span>
+                        <strong style="color:#1e40af;font-size:16px;">Canal de Avisos Oficiales</strong>
+                      </div>
+                      <p style="color:#475569;font-size:13px;margin:0 0 16px;line-height:1.5;">
+                        Fechas de exámenes, cambios de horario, noticias importantes y materiales de estudio.
+                      </p>
+                      <a href="https://t.me/+xqoypdLxpdRjOTZk" 
+                         style="display:inline-block;background:#0110D6;color:#ffffff;text-decoration:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;">
+                        📡 Unirme al Canal
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+  
+                <!-- GRUP ALUMNES -->
+                <table width="100%" cellpadding="0" cellspacing="0" style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;margin-bottom:8px;">
+                  <tr>
+                    <td style="padding:20px 24px;">
+                      <div style="margin-bottom:8px;">
+                        <span style="font-size:24px;margin-right:10px;">💬</span>
+                        <strong style="color:#166534;font-size:16px;">Grupo de Alumnos</strong>
+                      </div>
+                      <p style="color:#475569;font-size:13px;margin:0 0 16px;line-height:1.5;">
+                        Chat entre alumnos, dudas, consejos y compañía durante el curso.
+                      </p>
+                      <a href="https://t.me/+wiCHnvYooCMxYzRk" 
+                         style="display:inline-block;background:#16a34a;color:#ffffff;text-decoration:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;">
+                        👥 Unirme al Grupo
+                      </a>
+                    </td>
+                  </tr>
+                </table>
   
                 <p style="color:#94a3b8;font-size:12px;text-align:center;margin:20px 0 0;">
                   Si tienes algún problema, contacta con nosotros por WhatsApp.

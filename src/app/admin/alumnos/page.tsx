@@ -5,7 +5,7 @@ import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'
 import { emailInvitacioRegistre } from '@/lib/emails/invitacio-registre'
 import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
 import Link from 'next/link'
-import EliminarButton from './EliminarButton'
+import { InvitacioButton, EliminarButton } from './EliminarButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -231,13 +231,8 @@ export default async function AlumnosPage({
               <div className="flex gap-2 flex-wrap">
                 {/* Enviar invitació — alumnes aprovats però no registrats */}
                 {a.aprovat && !a.registrat && (
-                  <form action={enviarInvitacio.bind(null, a.id)}>
-                    <button type="submit"
-                      className="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-blue-200">
-                      ✉️ Enviar invitación
-                    </button>
-                  </form>
-                )}
+  <InvitacioButton action={enviarInvitacio.bind(null, a.id)} />
+)}
                 {a.registrat && !a.aprovat && (
                   <form action={aprovarAlumne.bind(null, a.id)}>
                     <button type="submit"
