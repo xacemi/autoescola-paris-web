@@ -2,7 +2,10 @@ import { createSupabaseServerClient } from '@/lib/supabase-server'
 import { createClient } from '@supabase/supabase-js'
 import { revalidatePath } from 'next/cache'
 import { sendTelegramWelcomeEmail } from '@/lib/send-telegram-welcome'
+import { emailInvitacioRegistre } from '@/lib/emails/invitacio-registre'
+import { SESClient, SendEmailCommand } from '@aws-sdk/client-ses'
 import Link from 'next/link'
+import EliminarButton from './EliminarButton'
 
 export const dynamic = 'force-dynamic'
 
@@ -63,6 +66,37 @@ async function rebutjarAlumne(id: string) {
     const user = users?.users?.find((u) => u.email === alumne.email)
     if (user) await supabaseAdmin.auth.admin.deleteUser(user.id)
   }
+  revalidatePath('/admin/alumnos')
+}
+
+async function enviarInvitacio(id: string) {
+  'use server'
+  const supabase = await createSupabaseServerClient()
+  const { data: alumne } = await supabase
+    .from('alumnes_autoritzats')
+    .select('email, nom')
+    .eq('id', id)
+    .single()
+
+  if (!alumne?.email || !alumne?.nom) return
+
+  const ses = new SESClient({
+    region: process.env.AWS_REGION ?? 'eu-west-1',
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    },
+  })
+
+  await ses.send(new SendEmailCommand({
+    Source: 'Autoescola Paris <hola@autoescolaparis.com>',
+    Destination: { ToAddresses: [alumne.email] },
+    Message: {
+      Subject: { Data: '¡Ya puedes acceder a la Zona Alumnos de Autoescola Paris!' },
+      Body: { Html: { Data: emailInvitacioRegistre(alumne.nom) } },
+    },
+  }))
+
   revalidatePath('/admin/alumnos')
 }
 
@@ -180,11 +214,14 @@ export default async function AlumnosPage({
                 {a.seu && <p className="text-xs text-zinc-400">Sede: {a.seu}</p>}
               </div>
 
-              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${a.aprovat ? 'bg-green-100 text-green-700' :
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${a.aprovat && a.registrat ? 'bg-green-100 text-green-700' :
+                  a.aprovat && !a.registrat ? 'bg-blue-100 text-blue-700' :
                   a.registrat ? 'bg-amber-100 text-amber-700' :
                     'bg-zinc-100 text-zinc-600'
                 }`}>
-                {a.aprovat ? 'Aprobado' : a.registrat ? 'Pendiente aprobación' : 'No registrado'}
+                {a.aprovat && a.registrat ? 'Aprobado' :
+                  a.aprovat && !a.registrat ? 'Pendiente registro' :
+                  a.registrat ? 'Pendiente aprobación' : 'No registrado'}
               </span>
 
               <p className="text-xs text-zinc-400 whitespace-nowrap">
@@ -192,6 +229,15 @@ export default async function AlumnosPage({
               </p>
 
               <div className="flex gap-2 flex-wrap">
+                {/* Enviar invitació — alumnes aprovats però no registrats */}
+                {a.aprovat && !a.registrat && (
+                  <form action={enviarInvitacio.bind(null, a.id)}>
+                    <button type="submit"
+                      className="bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-blue-200">
+                      ✉️ Enviar invitación
+                    </button>
+                  </form>
+                )}
                 {a.registrat && !a.aprovat && (
                   <form action={aprovarAlumne.bind(null, a.id)}>
                     <button type="submit"
@@ -208,12 +254,7 @@ export default async function AlumnosPage({
                     </button>
                   </form>
                 )}
-                <form action={eliminarAlumne.bind(null, a.id)}>
-                  <button type="submit"
-                    className="bg-red-50 hover:bg-red-100 text-red-600 text-xs font-semibold px-3 py-2 rounded-lg transition-colors border border-red-200">
-                    🗑️ Eliminar
-                  </button>
-                </form>
+                <EliminarButton action={eliminarAlumne.bind(null, a.id)} />
               </div>
             </div>
           ))}
