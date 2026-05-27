@@ -24,8 +24,6 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
 
   return (
     <div className="min-h-screen bg-[#F4F6FB]">
-      <PushSubscriber seu={alumne.seu} />
-
       {/* Header */}
       <header className="bg-[#0110D6] text-white sticky top-0 z-50 shadow-sm">
         <div className="max-w-lg mx-auto px-4 py-3 flex items-center justify-between">
@@ -53,6 +51,9 @@ export default async function AlumnesLayout({ children }: { children: React.Reac
             </Link>
           ))}
         </nav>
+
+        {/* Banner notificacions — just sota el nav, dins del header sticky */}
+        <PushSubscriber seu={alumne.seu} />
       </header>
 
       <main className="max-w-lg mx-auto px-4 py-6">
