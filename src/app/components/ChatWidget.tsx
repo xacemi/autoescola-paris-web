@@ -85,7 +85,7 @@ export default function ChatWidget({ embedded = false }: { embedded?: boolean })
         <button
           onClick={() => setOpen((v) => !v)}
           aria-label="Obrir chat amb IA"
-          className="fixed bottom-24 right-6 z-50 w-14 h-14 bg-[#F59E0B] hover:bg-[#D97706] text-white rounded-full shadow-xl flex items-center justify-center transition-all active:scale-95"
+          className="fixed bottom-20 right-6 z-50 w-14 h-14 bg-[#F59E0B] hover:bg-[#D97706] text-white rounded-full shadow-xl flex items-center justify-center transition-all active:scale-95"
         >
           {open ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
