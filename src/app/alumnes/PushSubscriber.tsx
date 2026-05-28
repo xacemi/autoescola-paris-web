@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from 'react'
 
+const BANNER_KEY = 'push_banner_dismissed_at'
+const UNA_SETMANA_MS = 7 * 24 * 60 * 60 * 1000
+
 export default function PushSubscriber({ seu }: { seu: string }) {
   const [mounted, setMounted] = useState(false)
   const [mostrarBanner, setMostrarBanner] = useState(false)
@@ -19,13 +22,16 @@ export default function PushSubscriber({ seu }: { seu: string }) {
       const permission = Notification.permission
 
       if (permission === 'granted') {
-        // Ja té permís — subscriure automàticament
         await subscriure()
       } else if (permission === 'default') {
-        // No ha decidit encara — mostrar banner
+        // Comprovar si fa menys d'una setmana que es va tancar
+        const dismissedAt = localStorage.getItem(BANNER_KEY)
+        if (dismissedAt) {
+          const elapsed = Date.now() - parseInt(dismissedAt)
+          if (elapsed < UNA_SETMANA_MS) return // No mostrar fins d'aquí una setmana
+        }
         setMostrarBanner(true)
       }
-      // Si és 'denied' no fem res
     }
 
     checkPermission()
@@ -52,6 +58,12 @@ export default function PushSubscriber({ seu }: { seu: string }) {
     if (permission === 'granted') {
       await subscriure()
     }
+    localStorage.removeItem(BANNER_KEY)
+    setMostrarBanner(false)
+  }
+
+  function handleTancar() {
+    localStorage.setItem(BANNER_KEY, Date.now().toString())
     setMostrarBanner(false)
   }
 
@@ -74,7 +86,7 @@ export default function PushSubscriber({ seu }: { seu: string }) {
             Activar
           </button>
           <button
-            onClick={() => setMostrarBanner(false)}
+            onClick={handleTancar}
             className="text-blue-200 hover:text-white text-xs px-2 py-1.5 transition-colors"
           >
             ✕
